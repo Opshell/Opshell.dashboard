@@ -1,0 +1,210 @@
+//@extend class
+
+* {
+    padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+// 最底三層
+html{
+    // 下面兩項參數是為了 載全版頁面的設計下
+    // 手機瀏覽器可以正確排除工具列的高度
+    // 後來出現了統一標準 dvh 只剩firefix 不支援
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    overflow: -moz-scrollbars-vertical;
+}
+body{
+    width: 100%;
+    background: $colorBack;
+    visibility: visible;
+    @extend %baseFont;
+    &.fixed{ overflow: hidden; }
+}
+
+#app {
+    display: flex;
+    align-items: center;
+    background: $colorBack;
+    height: 100vh; // 讓firefox也能正常顯示
+    @include setSize(100%, 100dvh);
+
+    // 設定卷軸樣式
+    @include setScroll();
+}
+
+// 表單相關
+form{
+    font-size: $fontSizeBase;
+    }
+    label{
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+    }
+    // input {
+    //     &:-webkit-autofill { -webkit-box-shadow: 0 0 0 30px #fcfcfc inset; }
+    //     -webkit-autofill:unset;
+    //     font-size: $fontSizeBase;
+
+    //     &:focus { outline: 0; }
+    //     &::placeholder {color: #ccc;}
+
+    //     &[type='text'],
+    //     &[type='password'] {
+    //         padding: 0px 5px;
+    //         vertical-align: top;
+    //         border: 1px solid rgba(216, 216, 216, .8);
+    //     }
+
+    //     &[type="radio"],
+    //     &[type="checkbox"] {
+    //         margin-right: 5px;
+    //         cursor: pointer;
+    //         vertical-align: middle;
+    //     }
+
+    //     &[type=number] { -moz-appearance: textfield; }
+    //     &[type=number]::-webkit-inner-spin-button,
+    //     [type=number]::-webkit-outer-spin-button {
+    //         -webkit-appearance: none;
+    //         margin: 0;
+    //     }
+
+    //     &.hid { display: none; }
+    // }
+    select{
+        // @extend input[type='radio'];
+        /*移除箭頭樣式*/
+        appearance:none;
+        -moz-appearance:none;
+        -webkit-appearance:none;
+        /*IE隱藏箭頭樣式*/
+        &::-ms-expand { display: none;}
+
+        /*改變右邊箭頭樣式*/
+        // background: #fff url("../images/selectArrow.png")no-repeat calc(100% - 15px) center;
+
+        @include setSize(100%, 34px);
+        padding: 2px;
+        padding-right:40px;
+        border: 0px;
+        margin: 0;
+        outline: none;
+        font-size: $fontSizeBase;
+        color: #333;
+
+        /* 卷軸設定 */
+        &::-webkit-scrollbar {
+            background: #eee;
+            width: 4px;
+            border-radius: 2px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: $colorMain;
+        }
+    }
+    textarea{
+        padding:5px;
+        border:1px solid rgba(216, 216, 216, .8);
+        box-sizing:border-box;
+        resize:none;
+        font-size: $fontSizeBase;
+}
+
+img {
+    max-width: 100%;
+    object-fit: cover;
+}
+
+a{
+    cursor: pointer;
+    color:inherit;
+    font-size:inherit;
+    text-decoration:none;
+    @extend %baseFont;
+}
+
+h1,h2,h3,h4,h5,h6,p{margin: 0;}
+
+//font AWESOME
+.font-button{
+    .far,
+    .fas{
+        color: #666;
+        transition: .08s $cubic-FiSo;
+    }
+
+    &:hover{
+        .far,
+        .fas{ color: $colorMain; }
+    }
+}
+
+//other
+.zero-size{font-size: 0px;letter-spacing: 0px;word-spacing: 0px;}
+.required{color: $colorMain;margin: 0 0 0 8px;}
+.red{color: #CB1E1E;}
+.space{display:inline-block;width: 7px;}
+.clear{clear:both;height:0px;line-height:0px;font-size:0px;overflow:hidden;}
+.ellipsis{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hidden{display:none;}
+
+//Animate
+
+
+
+
+
+// basic element
+.rowBox{
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding-left: 50px;
+    * { margin: 0 5px; }
+}
+
+.titleBtn{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    background: #ccc;
+    @include setSize(40px, 40px);
+    padding: 8px;
+    border: 2px solid #333;
+    border-radius: 20px;
+    box-sizing: border-box;
+    transition: .2s $cubic-FiSo;
+    overflow: hidden;
+
+    .text{
+        width: 0;
+        white-space: nowrap;
+    }
+    &:hover{ width: 150px; }
+}
+
+.table{
+    border-top: 1px solid #c8dae8;
+    border-right: 1px solid #c8dae8;
+    border-left: 1px solid #c8dae8;
+}
+// .input{ width: 100%; }
+// .textarea { @include setSize(100%, 100px); }
+.searchBar{
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+
+
+@import 'vueTransition';
+
+.noJS > div,
+.noJS > ul{display:none;}
+.noJS > noscript{display:block;width:100%;line-height:10em;}

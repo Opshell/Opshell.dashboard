@@ -1,0 +1,78 @@
+@keyframes menushow{
+    0%{opacity: 0;}
+    100%{opacity: 1;}
+}
+@keyframes visitsLoad{
+    0%{transform:translate3d(-100%,0,0);}
+    30%{transform:translate3d(-70%,0,0);}
+    80%{ transform:translate3d(-20%,0,0);}
+    95%{transform:translate3d(-5%,0,0);}
+    100%{ transform:translate3d(0%,0,0);}
+}
+@keyframes visitsShow{
+    0%{opacity: 0;transform: translate3d(0,45px,0);}
+    100%{opacity: 1;transform: translate3d(0,0,0);}
+}
+
+@keyframes fit-in {
+    0% {
+        transform: translate3d(-30px, -15px, 0) rotateX(-45deg);
+        opacity: 0;
+    }
+    100% {
+        transform: translate3d(0, 0, 0) rotateX(0deg);
+        opacity: 1;
+    }
+}
+@keyframes fall-in {
+    0% {
+        // perspective: 500px;
+        transform: translate3d(0, -30px, 0) rotateX(-90deg);
+        opacity: 0;
+    }
+    100% {
+        // perspective: 0;
+        transform: translate3d(0, 0, 0) rotateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes horiz-trav {
+    0% { transform: translate3d(-300px, -30px, 0 ) scale3d(1.2, 1.2, 1);  }
+    100% { transform: translate3d(0, 0, 0 ) scale3d(1, 1, 1); }
+}
+@keyframes horiz-trav-reverse {
+    0% { transform: translate3d(300px, -30px, 0 ) scale3d(1.5, 1.5, 1);  }
+    100% { transform: translate3d(0, 0, 0 ) scale3d(1, 1, 1); }
+}
+
+// 登入標題用
+@keyframes login-push-away {
+    0% { padding: 0; }
+    25% { color: #fff; }
+    50% { padding: 0 30px; }
+    75% { color: #fff; }
+    100% { padding: 0; }
+}
+@keyframes login-push-stop {
+    0% { padding: 0; }
+    25% { color: #fff; }
+    50% { padding: 0 30px; }
+    100% { padding: 0 30px; color: #fff;}
+}
+@keyframes login-move {
+    0% { left: -30px; }
+    100% { left: 190px; }
+}
+@include setRWD(600px) {
+    @keyframes login-move {
+        0% { left: -30px; }
+        100% { left: 180px; }
+    }
+}
+
+
+@keyframes circle {
+    0% { transform: rotateZ(0); }
+    100% { transform: rotateZ(360deg); }
+}

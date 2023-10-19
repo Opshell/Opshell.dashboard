@@ -82,23 +82,11 @@ export default defineConfig((command) => {
             // 預設使用 [http-proxy](https://github.com/http-party/node-http-proxy) 完整設定請見官方
             proxy: {
                 '/api': {
-                    // target: 'http://www.opshell.info/api/', // Docker Container 本機串接
-                    target: 'http://localhost:8090/api/', // Docker Container 本機串接
+                    // target: 'http://www.opshell.info/api/', // 正式機串接
+                    target: 'http://www.opshell.develop/api/', // 本機串接
                     ws: true, // 代理的WebSockets
                     changeOrigin: true, // 允許websockets跨域
                     rewrite: (path) => path.replace(/^\/api/, ''),
-                },
-                '/web': {
-                    target: 'http://localhost:8090/web/', // Docker Container 串接
-                    ws: true, // 代理的WebSockets
-                    changeOrigin: true, // 允許websockets跨域
-                    rewrite: (path) => path.replace(/^\/oauth/, ''),
-                },
-                '/oauth': {
-                    target: 'http://localhost:8090/oauth/', // Docker Container 串接
-                    ws: true, // 代理的WebSockets
-                    changeOrigin: true, // 允許websockets跨域
-                    rewrite: (path) => path.replace(/^\/oauth/, ''),
                 },
             },
         },

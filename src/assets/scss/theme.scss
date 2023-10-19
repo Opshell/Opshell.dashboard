@@ -1,0 +1,130 @@
+$colorBack: #fff; // 最底底色(body)
+$colorViewBack: #f7f8fa; // 可視區主要背景色
+
+// $colorMain: #12A6B7; // 主色
+$colorMain: #ead52a; // 主色
+$colorSubs: #444; // 輔色
+
+$colorInputBack: #a6a5a9; // 元件底色
+$colorFont: #a6a5a9; // 基礎文字顏色
+$colorUnFont: #FCFCFC; // 反轉文字顏色
+
+// 狀態色
+$colorError: #CB1E1E;
+$colorSuccess: #12b75c;
+$colorWarning: #EFD218;
+$colorInfo: #12a6b7;
+
+$colorFB  : #3b5998;
+$colorLINE: #00BA01;
+$colorTWIT: #1DA1F2;
+
+// 大區域 範圍設定
+%scope {
+    width: 100%;
+    max-width: 1730px;
+    padding-left: 40px;
+    padding-right: 40px;
+    margin: 0 auto;
+
+    @include setRWD (1800px) {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    @include setRWD (1024px) {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    @include setRWD (600px) {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+$shadow: 0 0 1px 0 rgba(0, 0, 0, .15);
+$shadow-in: 0 0 1px 0 rgba(0, 0, 0, .15) inset;
+
+$fontSizeBase: 14px; // 基礎文字大小
+
+// 預設文字樣式
+%baseFont {
+    color: $colorFont;
+    fill: $colorMain;
+    font-size: $fontSizeBase;
+    font-family: 'GenJyuuGothic', 'Noto Sans TC', '微軟正黑體', 'Arial', sans-serif;
+    -webkit-text-stroke: 0.1px;
+    letter-spacing: 1.2px;
+}
+
+$cubic-FiSo: cubic-bezier(.37,.99,.92,.96); //快進場緩停
+$cubic-FiFo: cubic-bezier(.25,.65,.85,.45); //快進快出
+$cubic-SiRo: cubic-bezier(.31,1.26,.19,1.11); //快速回彈
+$cubic-SiMo: cubic-bezier(.3,1,.94,1.1); //緩進微彈
+
+
+// popup
+$popup-width : 800px;
+$popup-height : 900px;
+
+
+// 設定卷軸樣式
+@mixin setScroll() {
+    // 卷軸體
+    &::-webkit-scrollbar {
+        background: $colorMain;
+        width: 15px;
+        border-radius: 7.5px;
+    }
+    // 卷軸底
+    &::-webkit-scrollbar-thumb {
+        background: #fff;
+        border-radius: 7.5px;
+        border: 0.5px solid rgba(153, 153, 153, 0.25);
+        // box-shadow: 0 0 10px 2px #20476e;
+    }
+
+    // 卷軸按鈕
+    // &::-webkit-scrollbar-button {
+    //     background: transparent; // 設定transparent會隱藏按鈕
+    //     border-radius: 4px;
+    // }
+    // &::-webkit-scrollbar-track-piece {
+    //     background: transparent; // 設定transparent會隱藏卷軸底
+    // }
+
+    // 卷軸底底 (可以幫卷軸底加陰影
+    // &::-webkit-scrollbar-track {
+    //     box-shadow: transparent;
+    // }
+}
+
+@mixin setBorder($notchSize: 20px, $notchColor: $colorViewBack, $borderColor: $colorMain) {
+    position: relative;
+    border: 3px solid $borderColor;
+    border-radius: 15px;
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        top: -3px;
+        z-index: 1;
+    }
+
+    &::before {
+        left: 18px;
+        background: $notchColor;
+        @include setSize($notchSize, 3px);
+    }
+    &::after {
+        left: 21px;
+        background: $borderColor;
+        @include setSize(3px, 3px);
+        border-radius: 50%;
+    }
+}
+
+// 動畫
+@import 'animate';
