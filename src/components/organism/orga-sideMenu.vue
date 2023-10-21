@@ -1,32 +1,32 @@
-<template>
-    <nav class="sideMenu">
-        <ElTreeItem :menu="list" :child_count="list.length" />
-    </nav>
-</template>
-
 <script setup lang="ts">
     import { iMenu } from '@/components/molecule/mole-treeItem.vue';
     import { getData } from '@/hooks/useApi';
 
     const list: Ref<iMenu[]> = ref([]);
 
-    getData('/api/backEnd/sidemenu').then((result) => {
+    getData('/mapi/user/getMenu').then((result) => {
         if (result && result.status) {
             list.value = result.data;
+
+            console.log('menu', list.value);
         }
     });
 </script>
+
+<template>
+    <nav class="sideMenu">
+        <MoleTreeItem :menu="list" :child_count="list.length" />
+    </nav>
+</template>
 
 <style lang="scss">
     .sideMenu {
         display: flex;
         flex-direction: column;
-        background: #333;
         @include setSize(100%, 100%);
-        padding: 0;
-        box-sizing: border-box;
-        overflow-y: auto;
+        padding: 0 20px;
 
+        overflow-y: auto;
         .fitBar {
             animation: fit-in 0.3s $cubic-FiSo both;
             @include setDelay('animation-delay', 15, 0.045);

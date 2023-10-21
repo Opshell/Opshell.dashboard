@@ -26,6 +26,7 @@ declare module 'vue' {
     ElTreeItem: typeof import('./../components/molecule/el-treeItem.vue')['default']
     Forget: typeof import('./../pages/Forget.vue')['default']
     HelloWorld: typeof import('./../components/HelloWorld.vue')['default']
+    Home: typeof import('./../pages/home.vue')['default']
     IconList: typeof import('./../pages/develop/IconList.vue')['default']
     Login: typeof import('./../pages/Login.vue')['default']
     MessageBoard: typeof import('./../pages/patient/MessageBoard.vue')['default']

@@ -61,6 +61,21 @@
     transform: translateY(100px);
 }
 
+// 反向 - 垂直位移淡入淡出
+.fadeYres-enter-active,
+.fadeYres-leave-active {
+    transition: .3s $cubic-FiSo;
+}
+.fadeYres-enter-from,
+.fadeYres-leave-to {
+    opacity: 0;
+    transform: translateY(100px);
+}
+// .fadeYres-leave-to {
+//     opacity: 0;
+//     transform: translateY(-100px);
+// }
+
 // 水平位移淡入淡出
 .fadeX-enter-active,
 .fadeX-leave-active {

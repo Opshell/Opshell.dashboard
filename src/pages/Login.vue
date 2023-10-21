@@ -26,12 +26,15 @@
         showPass.value = !showPass.value;
     };
 
+    const sendMode = ref(false);
+
     onMounted(() => { // [#] 可以增加填入記憶的帳號
         loginForm.username = 'Opshell';
-        loginForm.password = 'pass';
+        loginForm.password = 'password';
     });
 
     const handleLogin = () => {
+        sendMode.value = true;
         // 資料檢查
         const checker = new useValidactor();
 
@@ -41,18 +44,21 @@
         const errorMsg = checker.getErrorsAsString();
 
         if  (errorMsg === '') { // 檢查通過
-            getData('/api/backEnd/login', 'POST', loginForm).then((auth) => { // 本機測試環境
+            getData('/mapi/user/login', 'POST', loginForm).then((auth) => { // 本機測試環境
+                console.log(auth);
                 if(auth){
                     if (auth.status) {
-                        // expires_in
-                        // refresh_token
-                        // token_type
                         if (auth.access_token) {
-                            userStore.signIn(auth.access_token, auth.refresh_token);
 
-                            // 導向來源 或者 首頁
-                            const redirect = route.redirectedFrom?.fullPath || '/';
-                            router.push({path: redirect});
+                            // 模擬延遲
+                            setTimeout(() => {
+                                userStore.signIn(auth.access_token, auth.refresh_token);
+
+                                // 導向來源 或者 首頁
+                                const redirect = route.redirectedFrom?.fullPath || '/';
+                                router.push({path: redirect});
+                            }, 800);
+
                         } else {
                             proxy.$notify('error', '登入失敗！', 'Token 缺失！！');
                         }
@@ -79,7 +85,7 @@
 </script>
 
 <template>
-    <article class="loginBlock">
+    <article class="loginBlock" :class="{sending: sendMode}">
         <section class="logoBlock">
             <div class="logoBox">
                 <ElImg class="logo" src="/assets/images/Opshell-5x.png" />
@@ -185,6 +191,10 @@
             @include setFlex(flex-end);
             width: 100%;
             font-size: 12px;
+        }
+
+        &.sending {
+            
         }
     }
 

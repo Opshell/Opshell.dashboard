@@ -1,23 +1,3 @@
-<template>
-    <template v-for="(item, i) in list" :key="i">
-        <div class="linkBlock" v-if="item.child" :class="{ box: item.child.length > 0, open: !item.hide_sub, fitBar: depth == 0 }">
-            <div class="link" :style="{ 'padding-left': depth * 1.5 + 'em' }" @click="openChild(i)">
-                <elSvgIcon class="icon" name="folder" />
-                <span class="text">{{ item.title }}</span>
-                <elSvgIcon v-if="item.hide_sub" class="icon" name="square-plus" />
-                <elSvgIcon v-else class="icon" name="square-minus" />
-            </div>
-            <div class="linkBox" :style="{ height: boxHeight + 'px' }">
-                <elTreeItem :menu="item.child" :depth="depth + 1" :hide_sub="item.hide_sub ? true : false" :child_count="item.child.length || 0" @calc-height="calcHeight" />
-            </div>
-        </div>
-        <router-link v-else class="link" :class="{ fitBar: depth == 0 }" :to="item.link" :key="'i_' + item.id" :depth="depth" :style="{ 'padding-left': depth * 1.5 + 'em' }">
-            <elSvgIcon class="icon" :name="item.icon" />
-            <span class="text">{{ item.title }}</span>
-        </router-link>
-    </template>
-</template>
-
 <script setup lang="ts">
     export interface iMenu {
         id: number;
@@ -102,78 +82,111 @@
     );
 </script>
 
+<template>
+    <template v-for="(item, i) in list" :key="i">
+        <div class="linkBlock" v-if="item.child" :class="{ box: item.child.length > 0, open: !item.hide_sub, fitBar: depth == 0 }">
+            <div class="link" :style="{ 'padding-left': depth * 32 + 'px' }" @click="openChild(i)">
+                <ElSvgIcon class="icon" name="folder" />
+                <span class="text">{{ item.title }}</span>
+                <ElSvgIcon v-if="item.hide_sub" class="icon" name="square-plus" />
+                <ElSvgIcon v-else class="icon" name="square-minus" />
+            </div>
+            <div class="linkBox" :style="{ height: boxHeight + 'px' }">
+                <div class="boxLine" :style="{ 'left': (depth + 1) * 32 - 22 + 'px' }"></div>
+                <MoleTreeItem :menu="item.child" :depth="depth + 1" :hide_sub="item.hide_sub ? true : false" :child_count="item.child.length || 0" @calc-height="calcHeight" />
+            </div>
+        </div>
+        <router-link v-else class="link" :class="{ fitBar: depth == 0 }" :to="item.link" :key="'i_' + item.id" :depth="depth" :style="{ 'padding-left': depth * 32 + 'px' }">
+            <ElSvgIcon class="icon" :name="item.icon" />
+            <span class="text">{{ item.title }}</span>
+        </router-link>
+    </template>
+</template>
+
 <style lang="scss" scoped>
     .linkBlock {
         .linkBox {
-            background: rgba(0, 0, 0, 0.2);
+            position: relative;
+            // background: rgba(0, 0, 0, 0.2);
             height: 0;
-            box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.3) inset;
+            // box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.3) inset;
             cursor: pointer;
 
             overflow: hidden;
             transition: 0.15s $cubic-FiSo;
+
+            .boxLine {
+                position: absolute;
+                top: 0;
+                background: $colorFont;
+                @include setSize(3px, calc(100% - 20px));
+                border-radius: 1.5px;
+                &::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    background: $colorFont;
+                    @include setSize(16px, 3px);
+                    border-radius: 1.5px;
+                }
+            }
         }
     }
 
     .link {
         position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        @include setFlex(space-between, center, 10px);
 
-        background: rgba(0, 0, 0, 0.2);
+        // background: rgba(0, 0, 0, .2);
         @include setSize(100%, 40px);
-        padding: 5px 2px;
-        border-top: 1px solid #333;
-        border-bottom: 1px solid #666;
-        box-sizing: border-box;
+        padding: 5px 0;
+        // border-top: 1px solid #333;
+        // border-bottom: 1px solid #666;
 
-        color: #eee;
+        color: $colorFont;
+
         transition: background-color 0.5s $cubic-FiSo 0.2s;
         cursor: pointer;
-        overflow: hidden;
         .icon {
-            @include setSize(1.5em, 1.5em);
-            margin: 0 8px;
-            fill: #eee;
+            flex-shrink: 0;
+            @include setSize(22px, 22px);
+            fill: $colorFont;
         }
         .text {
             flex: 1;
+            font-size: 20px;
             text-align: left;
         }
 
-        // &::before {
-        //     content: "";
-        //     position: absolute;
-        //     top: 50%;
-        //     left: 0;
-        //     background: linear-gradient(to right, #2c3e50 0%, #334e69 100%);
-        //     @include setSize(30px, 30px);
-        //     border-radius: 50%;
-        //     opacity: 0;
-        //     transform: translate3d(-100%, -50%, 0);
-        //     transition: 0.15s $cubic-FiSo;
-        // }
-
         &:hover {
-            color: #42b983;
-            .icon {
-                fill: #42b983;
-            }
-            // &::before {}
-        }
-
-        &:active {
-            background-color: #2c474e;
-            transition: background-color 0.15s $cubic-FiSo;
-        }
-
-        &.router-link-exact-active {
             color: $colorSubs;
             .icon {
                 fill: $colorSubs;
             }
             // &::before {}
+        }
+
+        &:active {
+            // color: $colorSubs;
+            // fill: $colorSubs;
+            // background-color: #2c474e;
+            // transition: background-color 0.15s $cubic-FiSo;
+        }
+
+        &.router-link-exact-active {
+            color: $colorMain;
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: -20px;
+                background: $colorMain;
+                @include setSize(5px, 100%);
+                border-radius: 2.5px 0 0 2.5px;
+            }
+            .icon { fill: $colorMain; }
         }
     }
 </style>

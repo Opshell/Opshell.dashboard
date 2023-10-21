@@ -45,10 +45,10 @@ export default [
         method: 'post',
         response: ({ body }) => {
             const { username, password } = body;
-            if (username === 'admin' && password === 'admin') {
+            if (username === 'Opshell' && password === 'password') {
                 const jwtService = new JwtService(secretKey);
                 // 生成 JWT
-                const payload: JwtPayload = { id: '1', name: 'Opshell' };
+                const payload: JwtPayload = { id: '1', name: 'Opshell', auth: 0 };
                 const token = jwtService.generateToken(payload);
 
                 return {
@@ -105,5 +105,113 @@ export default [
 
             return result;
         },
-    }
+    },
+    { // 依權限取得Menu
+        url: '/mapi/user/getMenu',
+        method: 'get',
+        response: ( { headers } ) => {
+            const token = headers.authorization.split('Bearer ')[1];
+            // const JWTStructure =  token.split('.'); // 解析使用者資料
+
+            const jwtService = new JwtService(secretKey);
+
+            // 驗證 JWT
+            const verifiedPayload = jwtService.verifyToken(token);
+
+            // 預設result
+            let result = {
+                status: -1,
+                message: '驗證失敗',
+                data: {},
+            }
+
+            const menu = [
+                {
+                    "id": 6,
+                    "parent_id": 0,
+                    "title": "文章",
+                    "icon": "notebook",
+                    "hide_sub": 1,
+                    "link": "/articleList"
+                },
+                {
+                    "id": 7,
+                    "parent_id": 0,
+                    "title": "圖標總覽",
+                    "icon": "square",
+                    "hide_sub": 1,
+                    "link": "/iconList"
+                },
+                {
+                    "id": 1,
+                    "parent_id": 0,
+                    "title": "後台管理",
+                    "icon": "folder",
+                    "hide_sub": 1,
+                    "link": "",
+                    "child": [
+                        {
+                            "id": 2,
+                            "parent_id": 1,
+                            "title": "權限群組",
+                            "icon": "fingerprint",
+                            "hide_sub": 1,
+                            "link": "/group"
+                        },
+                        {
+                            "id": 3,
+                            "parent_id": 1,
+                            "title": "後台帳號",
+                            "icon": "user",
+                            "hide_sub": 1,
+                            "link": "/admin"
+                        },
+                        {
+                            "id": 4,
+                            "parent_id": 1,
+                            "title": "網站設定",
+                            "icon": "folder",
+                            "hide_sub": 1,
+                            "link": "",
+                            "child": [
+                                {
+                                    "id": 9,
+                                    "parent_id": 4,
+                                    "title": "基本設定",
+                                    "icon": "settings",
+                                    "hide_sub": 1,
+                                    "link": "/setting"
+                                },
+                                {
+                                    "id": 8,
+                                    "parent_id": 4,
+                                    "title": "SEO 管理",
+                                    "icon": "chart-network",
+                                    "hide_sub": 1,
+                                    "link": "/seo"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "parent_id": 1,
+                            "title": "功能表單",
+                            "icon": "layers",
+                            "hide_sub": 1,
+                            "link": "/sectionList"
+                        }
+                    ]
+                }
+            ];
+
+            result = {
+                status: 0,
+                message: '驗證成功',
+                data: menu,
+            };
+
+            return result;
+        },
+    },
+
 ] as MockMethod[];

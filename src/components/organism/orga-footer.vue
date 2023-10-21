@@ -14,14 +14,10 @@
 <style lang="scss">
     .footerBlock {
         flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        background: #282828;
-        font-size: 10px;
+        @include setFlex(flex-end, center, 20px);
+        background: $colorBack;
         @include setSize(100%, 50px);
-        .text + .text {
-            margin: 0 20px;
-        }
+        @extend %scope;
+        font-size: 10px;
     }
 </style>

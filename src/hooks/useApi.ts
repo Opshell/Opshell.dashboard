@@ -49,9 +49,6 @@ export const getData = async function (
         data,
         headers,
     }).then((axiosResponse) => {
-        // console.log('response', axiosResponse);
-        console.log('response', axiosResponse);
-
         let result: iResult = {
             status: false,
             msg: '網路問題！',

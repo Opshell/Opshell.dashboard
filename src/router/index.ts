@@ -74,7 +74,7 @@ router.beforeEach(async (to, from) => {
     // [-]根據不同情況 導向不同首頁
     if (to.path === '/' || to.path === '/index') {
         if (userState.value.isLogin) {
-            return { name: 'PatientList', params: {p: 1} }; // 登入就去 會員列表
+            return { name: 'IconList' }; // 登入就去 會員列表
         } else {
             return { name: 'Login' }; // 沒登入就是去登入頁面
         }

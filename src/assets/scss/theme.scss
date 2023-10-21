@@ -1,12 +1,12 @@
 $colorBack: #fff; // 最底底色(body)
-$colorViewBack: #f7f8fa; // 可視區主要背景色
+$colorBlock: #f1f2f4; // 可視區主要背景色#f7f8fa
 
 // $colorMain: #12A6B7; // 主色
-$colorMain: #ead52a; // 主色
+$colorMain: #f8b62b; // 主色 ead52a
 $colorSubs: #444; // 輔色
 
 $colorInputBack: #a6a5a9; // 元件底色
-$colorFont: #a6a5a9; // 基礎文字顏色
+$colorFont: #868589; // 基礎文字顏色
 $colorUnFont: #FCFCFC; // 反轉文字顏色
 
 // 狀態色
@@ -27,10 +27,10 @@ $colorTWIT: #1DA1F2;
     padding-right: 40px;
     margin: 0 auto;
 
-    @include setRWD (1800px) {
-        padding-left: 30px;
-        padding-right: 30px;
-    }
+    // @include setRWD (1800px) {
+    //     padding-left: 30px;
+    //     padding-right: 30px;
+    // }
 
     @include setRWD (1024px) {
         padding-left: 20px;
@@ -100,7 +100,7 @@ $popup-height : 900px;
     // }
 }
 
-@mixin setBorder($notchSize: 20px, $notchColor: $colorViewBack, $borderColor: $colorMain) {
+@mixin setBorder($notchSize: 20px, $notchColor: $colorBlock, $borderColor: $colorMain) {
     position: relative;
     border: 3px solid $borderColor;
     border-radius: 15px;

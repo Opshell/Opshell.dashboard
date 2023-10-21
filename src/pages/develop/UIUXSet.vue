@@ -145,7 +145,7 @@
         flex-wrap: wrap;
         gap: 20px;
 
-        background: $colorViewBack;
+        background: $colorBlock;
         @include setSize(100%, auto);
         padding: 40px;
         border-radius: 50px;

@@ -24,58 +24,79 @@
 
 <template>
     <article class="accountBlock">
+        <div class="btnBox">
+            <ElSvgIcon @click="logout" title="選項" name="settings-sliders"></ElSvgIcon>
+        </div>
+
         <div class="logoBox">
             <ElImg class="logo" src="/assets/images/Opshell-5x.png" alt="user logo" />
         </div>
 
-        <div class="btnBox">
-            <h2 class="text">{{ userState.user.name }}</h2>
-            <ElBtn @click="logout" text="登出" title="登出" icon="sign-out" />
-            <ElBtn @click="logout" text="選項" title="選項" icon="settings-sliders" />
-        </div>
+        <h2 class="title">Welcome back {{ userState.user.name }}.</h2>
+        <div class="subtitle">You can control the Opshell website through this interface.</div>
     </article>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .accountBlock {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        position: relative;
+        @include setFlex(flex-start, center, 5px, column);
         width: 100%;
-        padding: 20px 10px 10px;
-        border-bottom: 5px solid $colorBack;
-        box-sizing: border-box;
+        padding: 20px;
         margin: 0 auto;
-        box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.08);
-
         color: $colorMain;
+
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            background: $colorMain;
+            @include setSize(calc(100% - 40px), 3px);
+            border-radius: 1.5px;
+            z-index: 1;
+        }
+
+        .btnBox {
+            position: absolute;
+            @include setFlex(flex-start);
+            width: 100%;
+            padding: 0 20px;
+
+            .icon {
+                @include setSize(32px, 32px);
+                cursor: pointer;
+                &:hover {
+                    fill: $colorMain;
+                }
+            }
+        }
+
         .logoBox {
             background: #eee;
             @include setSize(120px, 120px);
             padding: 10px;
-            border: 5px solid #f3f3f3;
+            border: 3px solid $colorSubs;
             border-radius: 50%;
-            box-sizing: border-box;
-            margin: 10px 10px 25px;
+            margin: 15px;
             overflow: hidden;
+
+            // perspective: 1000px;
+
+            animation: circleY 1.8s $cubic-FiSo 0.1s;
             .logo {
                 width: 100%;
             }
         }
-        .btnBox {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
 
-            .text {
-                flex-grow: 1;
-                display: flex;
-                align-items: center;
-                justify-content: flex-start;
-                color: #fff;
-                text-align: center;
-            }
+        .title {
+            color: #111;
+            font-size: 22px;
+        }
+        .subtitle {
+            color: $colorFont;
+            font-size: 18px;
+            text-align: center;
         }
     }
 </style>
