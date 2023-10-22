@@ -47,6 +47,19 @@
 //     transform: scale3d(1.25, 1.25, 1);
 // }
 
+
+// 放大 淡入淡出
+.zoomY-enter-active,
+.zoomY-leave-active {
+    transition: .2s $cubic-SiRo;
+}
+.zoomY-enter-from,
+.zoomY-leave-to {
+    opacity: 0;
+    transform: scale3d(1, 1.1, 1);
+}
+
+
 // 垂直位移淡入淡出
 .fadeY-enter-active,
 .fadeY-leave-active {

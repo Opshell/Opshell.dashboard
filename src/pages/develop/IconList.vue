@@ -45,16 +45,15 @@
 
 <style lang="scss" scoped>
     .iconBlock {
-        display: flex;
+        @include setFlex(flex-start, flex-start, 10px);
         flex-wrap: wrap;
-        align-items: flex-start;
-        justify-content: flex-start;
+        background: $colorBlock;
         width: 100%;
-        gap: 5px;
+        padding: 20px;
+        border-radius: 20px;
         .iconBox {
-            flex-direction: column;
             background: $colorMain;
-            width: 8%;
+            width: 9%;
             border-radius: 10px;
             cursor: pointer;
             transition: 0.3s $cubic-FiSo;

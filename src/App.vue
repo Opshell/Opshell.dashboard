@@ -91,23 +91,25 @@
             </transition>
         </div>
 
-        <section v-if="trans.logout" class="viewBlock"> <!-- v-if="states.user.isLogin"-->
-            <!-- <transition name="zoom" mode="out-in">
-                <div class="loadingMask" v-show="elStatusState.isLoading"></div>
-            </transition> -->
+        <transition name="zoomY" mode="out-in">
+            <section v-if="trans.logout" class="viewBlock"> <!-- v-if="states.user.isLogin"-->
+                <!-- <transition name="zoom" mode="out-in">
+                    <div class="loadingMask" v-show="elStatusState.isLoading"></div>
+                </transition> -->
 
-            <OrgaHeader></OrgaHeader>
+                <OrgaHeader></OrgaHeader>
 
-            <div class="contentBlock">
-                <router-view v-slot="{ Component }">
-                    <transition name="zoom" mode="out-in">
-                        <component :is="Component"></component>
-                    </transition>
-                </router-view>
-            </div>
+                <div class="contentBlock">
+                    <router-view v-slot="{ Component }">
+                        <transition name="zoom" mode="out-in">
+                            <component :is="Component"></component>
+                        </transition>
+                    </router-view>
+                </div>
 
-            <OrgaFooter></OrgaFooter>
-        </section>
+                <OrgaFooter></OrgaFooter>
+            </section>
+        </transition>
     </div>
 </template>
 
@@ -184,7 +186,9 @@
 
     .viewBlock {
         @include setFlex(space-between, stretch, 0, column);
+        background: $colorBlock;
         @include setSize();
+        padding: 20px 15px 20px 0;
         transition: 0.3s $cubic-FiSo 0.08s;
         overflow: hidden;
         .contentBlock {
@@ -208,15 +212,15 @@
 
             /* 卷軸設定 */
             &::-webkit-scrollbar {
-                background: #999;
-                width: 8px;
-                border-radius: 2px;
+                background: #eee;
+                width: 5px;
+                border-radius: 2.5px;
             }
             &::-webkit-scrollbar-thumb {
                 background: $colorMain;
-                border-radius: 5px;
-                border: 0.5px solid rgba(153, 153, 153, 0.5);
-                box-shadow: 0 0 10px 2px #20476e;
+                border-radius: 2.5px;
+                // border: 0.5px solid rgba(153, 153, 153, 0.5);
+                // box-shadow: 0 0 10px 2px #20476e;
             }
         }
     }

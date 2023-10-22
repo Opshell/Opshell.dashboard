@@ -18,6 +18,7 @@
         background: $colorBack;
         @include setSize(100%, 50px);
         @extend %scope;
+        border-radius: 0 0 20px 20px;
         font-size: 10px;
     }
 </style>

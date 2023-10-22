@@ -18,13 +18,12 @@
 
 <style lang="scss" scoped>
     .contentBox {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 35px;
-        padding: 50px 20px 30px;
+        @include setFlex(center, center, 35px, column);
+        background: $colorBlock;
+        padding: 50px 20px 80px;
+        // border-radius: 20px;
         color: #333;
+        @include setBorder();
 
         .icon {
             fill: $colorError;
@@ -35,7 +34,6 @@
         .title,
         .content {
             text-shadow: 1px 1px 3px rgba($color: #000, $alpha: .2);
-
         }
         .title {
             font-size: 3.5rem;

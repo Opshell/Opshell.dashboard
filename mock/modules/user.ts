@@ -140,7 +140,7 @@ export default [
                     "title": "圖標總覽",
                     "icon": "square",
                     "hide_sub": 1,
-                    "link": "/iconList"
+                    "link": "/develop/icon-list"
                 },
                 {
                     "id": 1,

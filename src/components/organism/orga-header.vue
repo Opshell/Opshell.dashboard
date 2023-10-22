@@ -33,23 +33,51 @@
             {{ route.meta.title }}
         </div>
 
-        <div class="searchBlock">
+        <ElInputBox fieldName="搜尋" class="searchBlock">
             <ElInput placeholder="請輸入關鍵字" suffix-icon="el-icon-search"></ElInput>
-        </div>
+        </ElInputBox>
 
         <div class="btnBox">
-            <ElSvgIcon></ElSvgIcon>
-            <ElSvgIcon></ElSvgIcon>
+            <ElSvgIcon name="search"></ElSvgIcon>
+            <ElSvgIcon name="world"></ElSvgIcon>
+            <ElSvgIcon name="bell"></ElSvgIcon>
         </div>
     </header>
 </template>
 
 <style lang="scss">
     .headerBlock {
+        background: $colorBack;
+        @include setFlex(space-between, center, 10px);
+        padding: 40px;
         @extend %scope;
+        border-radius: 20px 20px 0 0;
+        .breadcrumbBox {
+            flex: 1;
+            color: $colorSubs;
+            font-size: 22px;
+            font-weight: bold;
+            line-height: 22px;
+        }
+
+        .searchBlock {
+            width: 250px;
+            background: $colorBlock;
+            border-radius: 5px;
+        }
+
         .btnBox {
+            @include setFlex(center, center, 10px);
             .icon {
-                @include setSize(32px, 32px);
+                background: $colorBlock;
+                @include setSize(40px, 40px);
+                padding: 8px;
+                border-radius: 5px;
+                fill: $colorFont;
+                cursor: pointer;
+                &:hover {
+                    fill: $colorMain;
+                }
             }
         }
     }

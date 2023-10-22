@@ -119,16 +119,20 @@
                 position: absolute;
                 top: 0;
                 background: $colorFont;
-                @include setSize(3px, calc(100% - 20px));
+                @include setSize(3px, calc(100% - 30px));
                 border-radius: 1.5px;
-                &::after {
+            }
+
+            .link {
+                .icon:first-child::before {
                     content: '';
                     position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    background: $colorFont;
-                    @include setSize(16px, 3px);
-                    border-radius: 1.5px;
+                    top: 0;
+                    left: -22px;
+                    border-left: 3px solid $colorFont;
+                    border-bottom: 3px solid $colorFont;
+                    @include setSize(14px, 9px);
+                    border-radius: 0 0 0 15px;
                 }
             }
         }
@@ -137,17 +141,26 @@
     .link {
         position: relative;
         @include setFlex(space-between, center, 10px);
-
-        // background: rgba(0, 0, 0, .2);
         @include setSize(100%, 40px);
-        padding: 5px 0;
-        // border-top: 1px solid #333;
-        // border-bottom: 1px solid #666;
+        padding: 5px 20px;
 
         color: $colorFont;
 
         transition: background-color 0.5s $cubic-FiSo 0.2s;
         cursor: pointer;
+        overflow: hidden;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: $colorBack;
+            @include setSize(0, 100%);
+            border-radius: 10px 0 0 10px;
+            transition: .2s $cubic-FiSo;
+        }
+
         .icon {
             flex-shrink: 0;
             @include setSize(22px, 22px);
@@ -161,10 +174,8 @@
 
         &:hover {
             color: $colorSubs;
-            .icon {
-                fill: $colorSubs;
-            }
-            // &::before {}
+            .icon { fill: $colorSubs; }
+            &::after { width: 15px; }
         }
 
         &:active {
@@ -176,15 +187,8 @@
 
         &.router-link-exact-active {
             color: $colorMain;
-
             &::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                right: -20px;
-                background: $colorMain;
-                @include setSize(5px, 100%);
-                border-radius: 2.5px 0 0 2.5px;
+                width: 40px;
             }
             .icon { fill: $colorMain; }
         }

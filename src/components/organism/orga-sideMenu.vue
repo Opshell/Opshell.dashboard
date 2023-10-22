@@ -24,8 +24,7 @@
         display: flex;
         flex-direction: column;
         @include setSize(100%, 100%);
-        padding: 0 20px;
-
+        padding-left: 20px;
         overflow-y: auto;
         .fitBar {
             animation: fit-in 0.3s $cubic-FiSo both;

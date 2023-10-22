@@ -103,7 +103,7 @@ $popup-height : 900px;
 @mixin setBorder($notchSize: 20px, $notchColor: $colorBlock, $borderColor: $colorMain) {
     position: relative;
     border: 3px solid $borderColor;
-    border-radius: 15px;
+    border-radius: 20px;
 
     &::before,
     &::after {
