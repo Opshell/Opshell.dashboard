@@ -51,13 +51,13 @@
                         if (auth.access_token) {
 
                             // 模擬延遲
-                            setTimeout(() => {
+                            // setTimeout(() => {
                                 userStore.signIn(auth.access_token, auth.refresh_token);
 
                                 // 導向來源 或者 首頁
                                 const redirect = route.redirectedFrom?.fullPath || '/';
                                 router.push({path: redirect});
-                            }, 800);
+                            // }, 800);
 
                         } else {
                             proxy.$notify('error', '登入失敗！', 'Token 缺失！！');
@@ -194,7 +194,7 @@
         }
 
         &.sending {
-            
+
         }
     }
 

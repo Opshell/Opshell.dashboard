@@ -135,12 +135,30 @@ export default [
                     "link": "/articleList"
                 },
                 {
-                    "id": 7,
+                    "id": 10,
                     "parent_id": 0,
-                    "title": "圖標總覽",
-                    "icon": "square",
+                    "title": "工程模式",
+                    "icon": "dashboard",
                     "hide_sub": 1,
-                    "link": "/develop/icon-list"
+                    "link": "",
+                    "child": [
+                        {
+                            "id": 101,
+                            "parent_id": 10,
+                            "title": "UI/UX View",
+                            "icon": "database",
+                            "hide_sub": 1,
+                            "link": "/develop/ui-ux-set"
+                        },
+                        {
+                            "id": 102,
+                            "parent_id": 10,
+                            "title": "圖標總覽",
+                            "icon": "grid",
+                            "hide_sub": 1,
+                            "link": "/develop/icon-list"
+                        },
+                    ]
                 },
                 {
                     "id": 1,

@@ -7,9 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    BlockAccount: typeof import('./../components/organism/block-account.vue')['default']
-    BlockFooter: typeof import('./../components/organism/block-footer.vue')['default']
-    BlockSideMenu: typeof import('./../components/organism/block-sideMenu.vue')['default']
+    copy: typeof import('./../components/molecule/mole-treeItem copy.vue')['default']
     DataAnalysis: typeof import('./../pages/patient/DataAnalysis.vue')['default']
     Develop: typeof import('./../pages/develop/index.vue')['default']
     ElBtn: typeof import('./../components/atom/el-btn.vue')['default']
@@ -23,7 +21,6 @@ declare module 'vue' {
     ElRadio: typeof import('./../components/atom/el-radio.vue')['default']
     ElSelect: typeof import('./../components/atom/el-select.vue')['default']
     ElSvgIcon: typeof import('./../components/atom/el-svgIcon.vue')['default']
-    ElTreeItem: typeof import('./../components/molecule/el-treeItem.vue')['default']
     Forget: typeof import('./../pages/Forget.vue')['default']
     HelloWorld: typeof import('./../components/HelloWorld.vue')['default']
     Home: typeof import('./../pages/home.vue')['default']
@@ -36,6 +33,9 @@ declare module 'vue' {
     MolePatientListBar: typeof import('./../components/molecule/mole-patientListBar.vue')['default']
     MolePopup: typeof import('./../components/molecule/mole-Popup.vue')['default']
     MoleTreeItem: typeof import('./../components/molecule/mole-treeItem.vue')['default']
+    MoleTreeItem_back: typeof import('./../components/molecule/mole-treeItem_back.vue')['default']
+    MoleTreeItem_back2: typeof import('./../components/molecule/mole-treeItem_back2.vue')['default']
+    MoleTreeItemChildBox: typeof import('./../components/molecule/mole-treeItemChildBox.vue')['default']
     OrgaAccount: typeof import('./../components/organism/orga-account.vue')['default']
     OrgaAlbum: typeof import('./../components/organism/orga-album.vue')['default']
     OrgaFooter: typeof import('./../components/organism/orga-footer.vue')['default']
