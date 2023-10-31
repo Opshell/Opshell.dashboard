@@ -37,8 +37,8 @@
         justify-content: center;
         @include setSize(100%, 100%);
         fill: #bbb;
-        overflow: hidden;
         transition: 0.2s $cubic-FiSo;
+        // overflow: hidden;
         .svg {
             display: flex;
             align-items: center;

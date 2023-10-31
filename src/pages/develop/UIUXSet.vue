@@ -14,19 +14,14 @@
     onMounted(() => {
         // select 外部點擊事件
         selectBox.value.map((ele)=> {
-            onClickOutside(ele, () => {
+            onClickOutside(ele, async () => {
                 if(ele.open){
-                    setTimeout(() => { // 有冒泡問題，所以要等一下 之後看看有沒有更好的解法
-                        ele.closeSelect();
-                    }, 10);
+                    await nextTick(); // 有冒泡問題，所以要nextTick
+
+                    ele.closeSelect();
                 }
             });
         });
-
-        // onClickOutside(selectBox, () => {
-        //     console.log('點擊外部', selectBox.open);
-        //     selectBox.closeSelect();
-        // });
     });
 
     const num1 = ref('1');
@@ -109,16 +104,16 @@
             <MoleDatePicker />
 
             <ElInputBox field-name="管徑">
-                <ElSelect :ref="(el: Element) => selectBox.push(el)" :options="list1" v-model="num1" unit="mm"/>
+                <ElSelect :ref="(el: SelectBox) => selectBox.push(el)" :options="list1" v-model="num1" unit="mm"/>
             </ElInputBox>
 
             <ElInputBox field-name="管長">
-                <ElSelect :ref="(el: Element) => selectBox.push(el)" :options="list2" v-model="num2" unit="cm"/>
+                <ElSelect :ref="(el: SelectBox) => selectBox.push(el)" :options="list2" v-model="num2" unit="cm"/>
             </ElInputBox>
 
             <ElInputBox field-name="管長">
-                <ElSelect :ref="(el: Element) => selectBox.push(el)" :options="list1" v-model="num1" unit="cm"/>
-                <ElSelect :ref="(el: Element) => selectBox.push(el)" :options="list2" v-model="num2" unit="cm"/>
+                <ElSelect :ref="(el: SelectBox) => selectBox.push(el)" :options="list1" v-model="num1" unit="cm"/>
+                <ElSelect :ref="(el: SelectBox) => selectBox.push(el)" :options="list2" v-model="num2" unit="cm"/>
             </ElInputBox>
         </div>
 
@@ -131,8 +126,13 @@
         </div>
 
         <div class="groupBox">
-            <MoleImgUpload />
+            <ElProgress :percent="100"/>
+            <ElProgress :percent="60" style-type="circle"/>
         </div>
+
+        <!-- <div class="groupBox">
+            <MoleImgUpload />
+        </div> -->
     </div>
 </template>
 
@@ -145,7 +145,7 @@
         flex-wrap: wrap;
         gap: 20px;
 
-        background: $colorBlock;
+        background: $colorViewBack;
         @include setSize(100%, auto);
         padding: 40px;
         border-radius: 50px;

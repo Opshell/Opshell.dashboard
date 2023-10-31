@@ -186,12 +186,12 @@
 
             .icon {
                 flex-shrink: 0;
-                @include setSize(20px, 20px);
+                @include setSize(22px, 22px);
                 fill: $colorFont;
             }
             .text {
                 flex: 1;
-                font-size: 18px;
+                font-size: 20px;
                 text-align: left;
             }
 
