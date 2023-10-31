@@ -1,19 +1,28 @@
 <script setup lang="ts">
-    import { useVModel } from '@vueuse/core';
-
-    const props = withDefaults(defineProps<{
-        modelValue?: string | number | null;
-    }>(), {
+    interface iProps {
+        modelValue?: string | null;
+    }
+    const props = withDefaults(defineProps<iProps>(), {
         modelValue: '',
     });
 
-    const emit = defineEmits(['update:modelValue']);
+    // type-based (TS)
+    const emit = defineEmits<{
+        (e: 'change', id: number): void;
+        (e: 'update:modelValue', value: string): void;
+    }>();
 
-    const data = useVModel(props, 'modelValue', emit);
+    // input值更新的時候，emit出去
+    const updateModelValue = (event: Event) => {
+        // 不斷言 HTMLInputElement的話 取值會有錯誤
+        const target = event.target as HTMLInputElement;
+
+        emit('update:modelValue', target.value);
+    };
 </script>
 
 <template>
-    <input class="input" v-model="data" />
+    <input class="input" :value="modelValue" @input="updateModelValue($event)" />
 </template>
 
 <style scoped lang="scss">

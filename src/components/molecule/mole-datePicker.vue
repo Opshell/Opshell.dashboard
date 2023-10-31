@@ -29,11 +29,11 @@
         auto-apply
     >
         <template #input-icon>
-            <ElSvgIcon class="calendarIcon" name="calendar"/>
+            <ElSvgIcon class="calendarIcon" name="calendar_month"/>
         </template>
 
         <template #clear-icon="{ clear }">
-            <ElSvgIcon class="clearIcon" name="trash" @click="clear"/>
+            <ElSvgIcon class="clearIcon" name="delete_forever" @click="clear"/>
         </template>
     </VueDatePicker>
 </template>
@@ -42,7 +42,8 @@
     .vueDatePicker{
         .datePickerInput { // input
             background: rgba(255, 255, 255, 0.95);
-            @include setSize(190px, 55px);
+            height: 55px;
+            min-width: 190px;
             // max-width: 210px;
             // min-width: 140px;
             padding: 8px 70px 8px 20px;

@@ -7,51 +7,27 @@
 
 <template>
     <label class="inputBox">
-        <slot></slot>
         <span class="text">{{ fieldName }}</span>
+        <slot></slot>
         <span v-if="remark != ''" class="remark">{{ remark }}</span>
     </label>
 </template>
 
 <style lang="scss">
     .inputBox {
-        @include setFlex(flex-start, flex-start, 0, column-reverse);
-
+        position: relative;
+        @include setFlex(space-between, center, 5px);
         background: #f8f8f8;
-        width: 100%;
-
-        padding: 8px 15px;
-        border: 2px solid $colorFont;
-        border-radius: 8px;
-        transition: .2s $cubic-FiSo;
-        &:focus-within {
-            border-color: $colorMain;
+        min-height: 55px;
+        padding: 0 0 0 12px;
+        border-radius: 20px;
+        &.radio {
+            justify-content: flex-start;
         }
-        &.disabled {
-            background: #eee;
-            border-color: #ddd;
-            color: #666;
-            cursor: not-allowed;
-        }
-
-        .input {
-            height: 0;
-            &:not(:placeholder-shown),
-            &:focus {
-                height: 20px;
-                ~ .text {
-                    color: $colorMain;
-                    transform: translateY(-3px);
-                }
-            }
-        }
-
         .text {
-            color: $colorSubs;
-            font-size: 16px;
+            color: $colorMain;
             white-space: nowrap;
             user-select: none;
-            transition: 0.2s $cubic-FiSo;
         }
     }
 </style>

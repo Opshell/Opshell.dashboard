@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { useVModel } from '@vueuse/core';
+
     interface iProps {
         name: string;
-        modelValue?: string | null;
+        modelValue?: string | number | null;
         value: string | number;
     };
     const props = withDefaults(defineProps<iProps>(), {
@@ -10,24 +12,22 @@
         value: ''
     });
 
-    // type-based (TS)
-    const emit = defineEmits<{
-        (e: 'change', id: number): void;
-        (e: 'update:modelValue', value: string): void;
-    }>();
+    const emit = defineEmits(['update:modelValue']);
 
-    // input值更新的時候，emit出去
-    const updateModelValue = (event: Event) => {
-        // 不斷言 HTMLInputElement的話 取值會有錯誤
-        const target = event.target as HTMLInputElement;
+    const data = useVModel(props, 'modelValue', emit);
 
-        emit('update:modelValue', target.value);
-    };
+    // // input值更新的時候，emit出去
+    // const updateModelValue = (event: Event) => {
+    //     // 不斷言 HTMLInputElement的話 取值會有錯誤
+    //     const target = event.target as HTMLInputElement;
+
+    //     emit('update:modelValue', target.value);
+    // };
 </script>
 
 <template>
     <label class="radioInput">
-        <input class="radioValue" type="radio" :value="value" :name="name" @input="updateModelValue($event)"/>
+        <input class="radioValue" type="radio" :value="value" :name="name" v-model="data"/>
         <div class="point"></div>
         <span class="text">
             <slot></slot>

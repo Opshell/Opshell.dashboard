@@ -32,13 +32,17 @@
 <style scoped lang="scss">
     .icon {
         position: relative;
-        @include setFlex();
+        display: flex;
+        align-items: center;
+        justify-content: center;
         @include setSize(100%, 100%);
         fill: #bbb;
-        // overflow: hidden;
+        overflow: hidden;
         transition: 0.2s $cubic-FiSo;
         .svg {
-            @include setFlex();
+            display: flex;
+            align-items: center;
+            justify-content: center;
             @include setSize(100%, 100%);
         }
 

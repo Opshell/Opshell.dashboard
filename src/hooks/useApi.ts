@@ -1,8 +1,7 @@
 // 從Axios 拉型別出來用
-import { Method, AxiosRequestHeaders } from 'axios';
+import { Method, AxiosRequestHeaders, AxiosRequestConfig, AxiosProgressEvent } from 'axios';
 import { storeToRefs } from 'pinia';
 import piniaStore from '@/store';
-import { Console } from 'console';
 
 // [-]固定的回傳格式(axios 的 data 內層)
 export interface iResult {
@@ -19,11 +18,18 @@ export interface iResult {
     refresh_token?: string; // 刷新 token
 }
 
+
+export interface iAxiosProgressEvent extends AxiosProgressEvent{
+    lengthComputable: boolean; // 是否開始上傳
+    total: number; // 上傳總量
+}
+
 export const getData = async function (
     url: string,
     method: Method = 'GET',
     data: any = {},
-    headers?: AxiosRequestHeaders
+    headers?: AxiosRequestHeaders,
+    onUploadProgress?: (progressEvent: iAxiosProgressEvent) => void
 ): Promise<iResult | null> {
 
     // [-]檢查store 或 storeg 有沒有 token 有的話就合併到到headers
@@ -43,12 +49,21 @@ export const getData = async function (
     if (!headers) headers = {} as AxiosRequestHeaders;
     headers.Authorization = `Bearer ${token}`;
 
-    return await axios({
+    const config: AxiosRequestConfig = {
         url,
         method,
         data,
         headers,
-    }).then((axiosResponse) => {
+    };
+
+    if (method === 'POST' && onUploadProgress) {
+        config.onUploadProgress = onUploadProgress;
+    }
+
+    return await axios(config)
+    .then((axiosResponse) => {
+        // console.log('response', axiosResponse);
+
         let result: iResult = {
             status: false,
             msg: '網路問題！',

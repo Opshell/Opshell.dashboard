@@ -10,17 +10,21 @@
         origin: 'public'
     });
 
-    const imgUrl = ref('');
-
-    if(props.origin === 'public') {
-        imgUrl.value = props.src;
-    } else {
-        if (file.getAssetsImageUrl(props.src) !== file.getAssetsImageUrl('')) {
-            imgUrl.value = file.getAssetsImageUrl(props.src);
+    const imgUrl = computed(() => {
+        if (props.src !== '') {
+            if(props.origin === 'public') {
+                return props.src;
+            } else {
+                if (file.getAssetsImageUrl(props.src) !== file.getAssetsImageUrl('')) {
+                    return file.getAssetsImageUrl(props.src);
+                } else {
+                    return '/assets/images/No_Image.jpg';
+                }
+            }
         } else {
-            imgUrl.value = '/assets/images/No_Image.jpg';
+            return '/assets/images/No_Image.jpg';
         }
-    }
+    });
 </script>
 
 <template>

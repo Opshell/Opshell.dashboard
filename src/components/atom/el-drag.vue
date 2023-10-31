@@ -57,13 +57,13 @@
             emit('update:position', { x: position.x, y: position.y });
         },
     });
-
-    props.container?.style.setProperty('background', '#333');
 </script>
 
 <template>
     <div ref="drag" class="drag" :style="style">
-        <slot></slot>
+        <span class="text">
+            <slot></slot>
+        </span>
     </div>
 </template>
 
@@ -71,8 +71,28 @@
     .drag {
         position: fixed;
         cursor: grab;
+        .text {
+            position: absolute;
+            top: calc(100% + 15px);
+            left: 50%;
+            background: $colorInputBack;
+            @include setSize(auto, auto);
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 5px 1px rgba(0, 0, 0, .15);
+            white-space: nowrap;
+            opacity: 0;
+            transition: .2s $cubic-FiSo;
+            transform: translateX(-50%);
+            user-select: none;
+        }
         &:active {
             cursor: grabbing;
+        }
+        &:hover {
+            .text {
+                opacity: 1;
+            }
         }
     }
 </style>

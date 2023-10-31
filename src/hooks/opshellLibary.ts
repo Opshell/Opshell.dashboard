@@ -89,7 +89,20 @@ export const file = {
      */
     getAssetsImageUrl: (filename: string) => {
         return new URL(`../assets/images/${filename}`, import.meta.url).href;
-    }
+    },
+
+    // 格式化文件大小顯示文字
+    formatSize: (size: number) => {
+        return size > 1024
+            ? size / 1024 > 1024
+                ? size / (1024 * 1024) > 1024
+                    ? (size / (1024 * 1024 * 1024)  > 1024)
+                        ? (size / (1024 * 1024 * 1024 * 1024)).toFixed(2) + "TB"
+                        : (size / (1024 * 1024 * 1024)).toFixed(2) + "GB"
+                    : (size / (1024 * 1024)).toFixed(2) + "MB"
+                : (size / 1024).toFixed(2) + "KB"
+            : size.toFixed(2) + "B";
+    },
 };
 
 // 驗證器

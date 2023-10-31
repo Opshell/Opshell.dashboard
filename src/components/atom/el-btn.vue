@@ -34,43 +34,61 @@
 <style lang="scss">
     .Btn {
         position: relative;
-        @include setFlex();
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
 
-        background: $colorSubs;
-        @include setSize(100%, 45px);
-        padding: 8px 15px;
-        border: 2px solid $colorSubs;
-        border-radius: 8px;
+        @include setSize(auto, 55px);
+        padding: 15px 25px;
+        border: 1px solid $colorMain;
+        border-radius: 20px;
 
-        color: #ccc;
+        color: $colorMain;
         cursor: pointer;
         transition: 0.2s $cubic-FiSo;
         overflow: hidden;
 
         .text {
-            font-size: 16px;
+            font-size: 20px;
             user-select: none;
         }
         &.current { // 當前頁面
-            flex: 6;
             background: $colorMain;
-            border-color: $colorMain;
-            color: $colorSubs;
+            color: #fff;
+        }
+        &.subs { // 次要
+            background: $colorSubs;
+            border-color: $colorSubs;
+            color: #fff;
+            &:hover {
+                background: $colorError;
+            }
         }
         &.back { // 返回
-            flex: 4;
             background-color: $colorFont;
             border-color: $colorFont;
             color: #fff;
         }
+        &.addBtn {
+            gap: 8px;
+            background: $colorSubs;
+            border-color: $colorSubs;
+            padding: 15px;
+            color: $colorUnFont;
+            .icon {
+                fill: $colorUnFont;
+                @include setSize(25px, 25px);
+            }
+            &.Btn .text { transform: translateY(-1px); }
+        }
 
         &:hover {
             background: $colorMain;
+            color: #fff;
             // filter: saturate(0.5);
-            border-color: $colorMain;
             box-shadow: 0 0 3px 1px rgba($color: #000, $alpha: .25);
-            color: $colorSubs;
-            transform: scale3d(1.03, 1.03, 1);
+            transform: scale3d(1.06, 1.06, 1);
             transition: .1s $cubic-FiSo;
         }
         &:active {

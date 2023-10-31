@@ -4,9 +4,11 @@
     const props = withDefaults(defineProps<{
         open?: boolean;
         title?: string;
+        class?: string;
     }>(), {
         open: false,
         title: '',
+        class: '',
     });
 
     const emit = defineEmits<{
@@ -21,21 +23,20 @@
 <template>
     <Teleport to="body">
         <transition name="fade" mode="out-in">
-            <div v-show="open" class="modalBlock" @click.self="close">
-
-                    <section class="modalBox">
-                        <header class="header">
-                            <span class="title">{{ title }}</span>
-                            <ElSvgIcon name="cross-small" class="btn" @click="close"></ElSvgIcon>
-                        </header>
-                        <div class="content">
-                            <slot></slot>
-                        </div>
-                        <footer class="footer">
-                            <ElBtn>上傳圖片</ElBtn>
-                            <ElBtn>儲 存</ElBtn>
-                        </footer>
-                    </section>
+            <div v-show="open" class="modalBlock" :class="class" @click.self="close">
+                <section class="modalBox">
+                    <header class="header">
+                        <span class="title">{{ title }}</span>
+                        <ElSvgIcon name="close" class="btn" @click="close"></ElSvgIcon>
+                    </header>
+                    <div class="content">
+                        <slot></slot>
+                    </div>
+                    <!-- <footer class="footer">
+                        <ElBtn>上傳圖片</ElBtn>
+                        <ElBtn>儲 存</ElBtn>
+                    </footer> -->
+                </section>
             </div>
         </transition>
     </Teleport>
@@ -49,13 +50,13 @@
         left: 0;
         @include setSize(100%, 100%);
         background: rgba(0, 0, 0, .5);
-        z-index: 999;
+        z-index: 100;
         .modalBox {
             @include setFlex(space-between, stretch, 30px, column);
             background: #fff;
-            @include setSize(calc(100% - 40px), calc(100% - 40px));
-            max-width: 1360px;
-            max-height: 900px;
+            @include setSize(auto, auto);
+            max-width: calc(100% - 40px);
+            max-height: calc(100% - 40px);
             padding: 0 50px 45px;
             border-radius: 50px;
 

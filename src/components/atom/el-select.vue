@@ -1,89 +1,112 @@
 <script setup lang="ts">
-    interface iOption {
+    interface Option<T> {
         title: string;
-        value: string | number;
+        value: T;
     }
 
     // 設定props type
-    interface iProps {
-        modelValue: string | number | null;
-        options: Array<iOption>;
+    interface iProps<T> {
+        modelValue: T | null;
+        options: Option<T>[];
+        multiple?: boolean;
         unit?: string;
     }
-    const props = withDefaults(defineProps<iProps>(), {
-        modelValue: '',
+
+    // [!] 要寫這一段後面才不會報錯 找時間在研究一下
+    const withDefaults = <T>(
+        props: iProps<T>,
+        defaults: Partial<iProps<T>>
+    ): iProps<T> => {
+        return Object.assign({}, defaults, props);
+    };
+
+    const props = withDefaults(defineProps<iProps<string | number | string[] | number[]>>(), {
+        modelValue: null,
         options: [{title: '請選擇', value: '1'}],
+        multiple: false,
         unit: '',
     });
 
+    // [-] Select 開關
     const open = ref(false);
-
-    // 開關下拉選單
     const triggerSelect = () => {
         open.value = !open.value;
     };
-
     // 關閉下拉選單(暴露出去做總控)
     const closeSelect = () => {
         open.value = false;
     };
+    defineExpose({ closeSelect, open });
 
-    // 目前選中的選項
+    // [-]目前選中的選項
     const option = computed(() => {
-        const option = props.options.find((item) => item.value == props.modelValue);
-        return option?.title || '';
+        let result = '';
+
+        if (props.multiple) {
+            const options = props.options.filter((item) => inArray(item.value, props.modelValue as string[]));
+
+            result = options.map((item) => item.title).join('、');
+        } else {
+            const option = props.options.find((item) => item.value == props.modelValue);
+
+            result = option?.title || '';
+        }
+
+        return result;
     });
 
-    // [-] 下面是輸出區塊-------------------------------------------------------------------------------------------
-
-    // type-based (TS)
     const emit = defineEmits<{
-        (e: 'change', id: number): void;
-        (e: 'update:modelValue', value: string): void;
+        'update:modelValue': [result: string | string[]]
     }>();
+
     // input值更新的時候，emit出去
     const updateModelValue = (event: Event) => {
         // 不斷言 HTMLInputElement的話 取值會有錯誤
         const target = event.target as HTMLInputElement;
 
-        // 關閉下拉選單
-        open.value = false;
+        let result: string | string[] = target.value;
 
-        emit('update:modelValue', target.value);
+        // 關閉下拉選單
+        if (!props.multiple) {
+            open.value = false;
+        } else {
+            if(Array.isArray(props.modelValue)){
+                let oldAry = props.modelValue as string[];
+
+                // 判斷 array 中有沒有這個值
+                if (oldAry.includes(target.value)) { // 有的話就刪除
+                    oldAry = oldAry.filter((item) => item != target.value);
+                } else { // 沒有的話就新增
+                    oldAry.push(target.value);
+                }
+
+                result = oldAry;
+            }
+        }
+
+        emit('update:modelValue', result);
     };
 
-    defineExpose({ closeSelect, open });
-
-    // 全域點擊事件 (掛載太多時會吃資源  改成VueUse onClickOutside 解決方案)
-    // const selectElement = ref<HTMLElement | null>(null);
-    // // 點擊畫面的全域事件監聽
-    // const handleClickOutside = (event: MouseEvent) => {
-    //     if (selectElement.value && !selectElement.value.contains(event.target as Node)) {
-    //         open.value = false; // 關閉選擇框
-    //     }
-    // };
-    // // 在onMounted後掛在監聽
-    // onMounted(() => {
-    //     window.addEventListener('click', handleClickOutside);
-    // });
-    // // 在组件銷毀时移除監聽，防止記憶體洩漏
-    // onUnmounted(() => {
-    //     window.removeEventListener('click', handleClickOutside);
-    // });
+    const inArray = <T>(value: T, array: T[]): boolean => {
+        return array.indexOf(value) !== -1;
+    };
 </script>
 
 <template>
-    <!-- 手刻一個ul 做的 select  -->
-    <div class="select" :class="{open: open}" ref="selectElement">
-        <div class="selected" @click="triggerSelect">
+    <div class="select" :class="{open: open}" ref="selectElement" role="select">
+        <div class="selected" @click="triggerSelect" :title="option">
             <span class="text">{{ option }}</span>
             <span v-if="unit != ''" class="unit">{{ unit }}</span>
-            <ElSvgIcon name="caret-down" />
+            <ElSvgIcon name="arrow_drop_down" />
         </div>
 
         <ul class="options">
             <li v-for="(item, i) in options" :key="`${item.title}_${i}`"
-                class="option" :class="{current: item.value == modelValue}"
+                class="option"
+                :class="{current:
+                    (multiple && (modelValue as string[]).includes(item.value)) ||
+                    (!multiple && item.value == modelValue)
+                }"
                 :value="item.value"
                 @click="updateModelValue($event)"
             >{{ item.title }}</li>
@@ -91,7 +114,6 @@
     </div>
 </template>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
     .select {
         display: flex;
@@ -123,14 +145,17 @@
         }
         &.open {
             border-color: $colorMain;
-
+            z-index: 10;
+            box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.25);
             .icon {
                 transform:  rotateX(180deg) translate3d(5px, -1px, 0);
             }
             .options {
-                max-height: 120px;
+                max-height: 180px;
                 opacity: 1;
+                box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.25);
                 transform: translateY(10px);
+                z-index: 1;
             }
         }
 
@@ -187,6 +212,8 @@
 
             .option {
                 padding: 8px 20px;
+                font-size: 18px;
+                user-select: none;
                 cursor: pointer;
                 transition: .1s $cubic-FiSo;
                 &:hover {

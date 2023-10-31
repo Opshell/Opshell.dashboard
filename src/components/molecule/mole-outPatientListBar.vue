@@ -20,6 +20,9 @@
         swelling?: number;
         pressure?: number;
         collapse?: number;
+        position?: number;
+        operation?: number;
+        result?: number;
         msg?: string;
     }
     const foldStatus = ref(false);
@@ -27,6 +30,7 @@
     const props = defineProps<{
         outpatient: iOutPatientItem;
         header: boolean;
+        i?: number;
     }>();
 
     const openStatus = ref(false);
@@ -36,12 +40,75 @@
     if (props.outpatient.id === 0) {
         editStatus.value = true;
     }
-
-
     const emit = defineEmits<{
-        (e: 'delete'): void;
-        (e: 'update:modelValue', value: string): void;
-    }>();
+        'delete': [];
+        'update:modelValue': [value: string];
+    }>()
+
+    // 之後做成 API
+    interface iQuestionnaire {
+        title: 'swelling' | 'pressure' | 'collapse' | 'position' | 'operation' | 'result';
+        question: string;
+        answer: {
+            [key: number]: string;
+        }
+    }
+    const questionnaire: iQuestionnaire[] = [
+        {
+            'title': 'swelling',
+            'question': '請問您目前是否有手臂腫脹之情況？',
+            'answer': {
+                1: '僅有左手',
+                2: '僅有右手',
+                3: '兩手都有',
+                4: '兩手都沒有',
+            }
+        },
+        {
+            'title': 'pressure',
+            'question': '請問您最近兩個禮拜血液透析時是否有靜脈壓力高之情況？',
+            'answer': {
+                1: '是',
+                0: '否',
+            }
+        },
+        {
+            'title': 'collapse',
+            'question': '請問將您的廔管高舉過心臟，廔管是否塌陷？',
+            'answer': {
+                1: '是',
+                0: '否',
+            }
+        },
+        {
+            'title': 'position',
+            'question': '收案地點？',
+            'answer': {
+                1: '門診',
+                2: '洗腎室',
+            }
+        },
+        {
+            'title': 'operation',
+            'question': '手術？',
+            'answer': {
+                1: '無',
+                2: 'PTA',
+                3: 'PTA+thrombectomy',
+                4: '例行性檢查',
+            }
+        },
+        {
+            'title': 'result',
+            'question': '診斷好壞？',
+            'answer': {
+                1: '好',
+                2: '壞',
+                3: '無聲音',
+                4: '無紀錄',
+            }
+        },
+    ];
 
     const openHandle = () => {
         if (!editStatus.value) {
@@ -64,9 +131,11 @@
         });
     }
     const saveHandle = () => {
-         // [#] 記得把剩下的邏輯補完
-         proxy.$notify('success', '結果', '修改成功。', 3000).then(() => {
-            console.log('修改');
+        // [#] 記得把剩下的邏輯補完
+        console.log('傳送新增、修改事件');
+
+        proxy.$notify('success', '結果', '修改成功。', 3000).then(() => {
+
         }).catch((error) => {
             console.log('error：', error);
         });
@@ -77,8 +146,8 @@
     <div class="outPatientListBar" :class="{open: openStatus, edit: editStatus}">
         <div class="tr" :class="{ thead: header }">
             <div class="td fold">
-                <ElSvgIcon v-if="header" name="document-signed" />
-                <ElSvgIcon v-else name="angle-small-down" @click="openHandle"/>
+                <ElSvgIcon v-if="header" name="description" />
+                <ElSvgIcon v-else name="arrow_drop_down" @click="openHandle"/>
             </div>
             <div class="td createDate">
                 <template v-if="header">{{ outpatient.createDate }}</template>
@@ -126,37 +195,30 @@
             <div class="td feature">
                 <template v-if="!header">
                     <ElSvgIcon class="edit" name="edit" @click="editHandle"/>
-                    <ElSvgIcon class="disk" name="disk" @click="saveHandle" />
-                    <ElSvgIcon class="cross-circle" name="cross-circle" @click="editHandle"/>
-                    <ElSvgIcon class="trash" name="trash" @click="deleteHandle"/>
+                    <ElSvgIcon class="disk" name="save" @click="saveHandle" />
+                    <ElSvgIcon class="trash" name="delete_forever" @click="deleteHandle"/>
+                    <ElSvgIcon class="cross-circle" name="cance" @click="editHandle"/>
                 </template>
             </div>
         </div>
         <article v-if="!header" class="drawer" :class="{open: foldStatus}">
             <section class="questionnaire">
                 <h3 class="title">問卷：</h3>
-                <div class="question">
-                    Q1.請問您目前是否有手臂腫脹之情況？
-                    <ElRadio name="swelling" value="1">僅有左手</ElRadio>
-                    <ElRadio name="swelling" value="2">僅有右手</ElRadio>
-                    <ElRadio name="swelling" value="3">兩手都有</ElRadio>
-                    <ElRadio name="swelling" value="4">兩手都沒有</ElRadio>
+
+                <div v-for="(item, index) in questionnaire" class="question" :key="`question_${item.title}`">
+                    Q{{Number(index)+1}}. {{item.question}}
+                    <ElRadio v-for="(text, answer) in item.answer" :key="`answer_${answer}`"
+                        :name="`${item.title}[${i}]`" :value="answer"
+                        v-model="outpatient[item.title]"
+                    >{{text}}</ElRadio>
                 </div>
-                <div class="question">
-                    Q2.請問您最近兩個禮拜血液透析時是否有靜脈壓力高之情況？
-                    <ElRadio name="pressure" value="1">是</ElRadio>
-                    <ElRadio name="pressure" value="0">否</ElRadio>
-                </div>
-                <div class="question">
-                    Q3.請問將您的廔管高舉過心臟，廔管是否塌陷？
-                    <ElRadio name="collapse" value="1">是</ElRadio>
-                    <ElRadio name="collapse" value="0">否</ElRadio>
-                </div>
+
             </section>
+
             <section class="remark">
                 <h3 class="title">回診狀況：</h3>
-                <textarea class="textarea" name="" cols="30" rows="10"></textarea>
-                <ElSvgIcon name="paper-plane"></ElSvgIcon>
+                <textarea class="textarea" :name="`msg[${i}]`" cols="30" rows="10" v-model="outpatient.msg"></textarea>
+                <ElSvgIcon name="send"></ElSvgIcon>
             </section>
         </article>
     </div>
@@ -169,7 +231,7 @@
         .tr {
             display: grid;
             grid-template-areas: "fold createDate place BP HR PI RI TAMEAN flow diameter next feature";
-            grid-template-columns: 45px 1fr 130px 150px repeat(6, 130px) 1fr 135px;
+            grid-template-columns: 50px 1fr 130px 150px repeat(6, 125px) 1fr 135px;
 
             background: $colorBack;
             @include setSize(100%, 80px);
@@ -195,32 +257,14 @@
                 .input {
                     min-width: 100px;
                 }
-                .icon {
-                    @include setSize(30px, 30px);
-                    cursor: pointer;
-                    svg {
-                        @include setSize(30px, 30px);
-                    }
-                    &:hover {
-                        transform: scale3d(1.2, 1.2, 1);
-                    }
-
-                    &.disk,
-                    &.cross-circle { width: 0; }
-                    &.edit,
-                    &.trash { width: 30px; }
-
-                    &.edit { fill: $colorMain; }
-                    &.disk { fill: $colorSuccess; }
-                    &.cross-circle { fill: $colorError; }
-                    &.trash { fill: $colorError; }
-                }
 
                 &.fold {
                     grid-area: fold;
-                    padding: 10px 5px 10px 20px;
+                    padding: 10px 0 10px 10px;
                     .icon {
                         fill: $colorMain;
+                        @include setSize(40px, 40px);
+                        svg { @include setSize(100%, 100%); }
                     }
                 }
                 &.createDate { grid-area: createDate; }
@@ -267,7 +311,25 @@
                 &.next { grid-area: next; }
                 &.feature {
                     grid-area: feature;
-                    gap: 5px;
+                    justify-content: center;
+                    gap: 8px;
+                    .icon {
+                        @include setSize(35px, 35px);
+                        cursor: pointer;
+
+                        svg { @include setSize(100%, 100%); }
+                        &:hover { transform: scale3d(1.2, 1.2, 1); }
+
+                        &.disk,
+                        &.cross-circle { width: 0; }
+                        &.edit,
+                        &.trash { width: 35px; }
+
+                        &.edit { fill: $colorMain; }
+                        &.disk { fill: $colorSuccess; }
+                        &.cross-circle { fill: $colorError; }
+                        &.trash { fill: $colorError; }
+                    }
                 }
             }
         }
@@ -288,38 +350,27 @@
             .drawer {
                 margin-top: -20px;
                 padding: 45px 20px 20px;
-                max-height: 300px;
+                max-height: 345px;
             }
         }
         &.open {
-            .tr {
-                .td.fold .icon {
-                    // fill: $colorUnFont;
-                    transform: rotateX(180deg);
-                }
+            .tr .td.fold .icon {
+                // fill: $colorUnFont;
+                transform: rotateX(180deg);
             }
         }
         &.edit {
             z-index: 10;
-            .tr {
-                .td {
-                    &.feature {
-                        gap: 16px;
-                    }
-                    .icon {
-                        &.disk,
-                        &.cross-circle {
-                            width: 30px;
-                        }
+            .tr .td.feature {
+                // gap: 16px;
+                .icon {
+                    &.disk,
+                    &.cross-circle { width: 35px; }
 
-                        &.edit,
-                        &.trash {
-                            width: 0;
-                        }
-                    }
+                    &.edit,
+                    &.trash { width: 0; }
                 }
             }
-
         }
     }
 
@@ -346,7 +397,8 @@
             flex-grow: 1;
             .textarea {
                 background: #fff;
-                max-height: 135px;
+                max-height: 235px;
+                padding: 10px 15px;
                 border: 1px solid #c1c1c1;
                 border-radius: 20px;
             }
@@ -355,11 +407,13 @@
                 bottom: 15px;
                 right: 15px;
                 background: #cfdedd;
-                @include setSize(30px, 30px);
+                @include setSize(40px, 40px);
                 border-radius: 50%;
                 fill: $colorMain;
+                cursor: pointer;
                 svg {
-                    @include setSize(20px, 20px);
+                    @include setSize(30px, 30px);
+                    transform: translateX(3px);
                 }
             }
         }

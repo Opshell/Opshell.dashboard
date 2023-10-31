@@ -132,7 +132,67 @@ export default [
                     "title": "文章",
                     "icon": "notebook",
                     "hide_sub": 1,
-                    "link": "/articleList"
+                    "link": "/article",
+                    "child": [
+                        {
+                            "id": 61,
+                            "parent_id": 6,
+                            "title": "文章分類",
+                            "icon": "receipt",
+                            "hide_sub": 1,
+                            "link": "/article/category"
+                        },
+                        {
+                            "id": 62,
+                            "parent_id": 6,
+                            "title": "文章標籤",
+                            "icon": "ticket",
+                            "hide_sub": 1,
+                            "link": "/article/tag"
+                        },
+                        {
+                            "id": 63,
+                            "parent_id": 6,
+                            "title": "文章管理",
+                            "icon": "document-signed",
+                            "hide_sub": 1,
+                            "link": "/article/list"
+                        },
+                    ]
+                },
+                {
+                    "id": 16,
+                    "parent_id": 0,
+                    "title": "作品集",
+                    "icon": "gallery",
+                    "hide_sub": 1,
+                    "link": "/portfolio",
+                    "child": [
+                        {
+                            "id": 161,
+                            "parent_id": 6,
+                            "title": "作品分類",
+                            "icon": "receipt",
+                            "hide_sub": 1,
+                            "link": "/portfolio/category"
+                        },
+                        {
+                            "id": 162,
+                            "parent_id": 6,
+                            "title": "作品標籤",
+                            "icon": "ticket",
+                            "hide_sub": 1,
+                            "link": "/portfolio/tag"
+                        },
+                        {
+                            "id": 163,
+                            "parent_id": 6,
+                            "title": "作品管理",
+                            "icon": "document-signed",
+                            "hide_sub": 1,
+                            "link": "/portfolio/list"
+                        },
+                    ]
                 },
                 {
                     "id": 10,

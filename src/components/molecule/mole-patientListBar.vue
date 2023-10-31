@@ -15,6 +15,11 @@
     const props = defineProps<{
         // header: iPatientItem;
         patient: iPatientItem;
+        // editPatient: (id: number) => void;
+    }>();
+
+    const emit = defineEmits<{
+        'editPatient': [id: number]
     }>();
 
     const href= ref(`/patient/${props.patient.id}`);
@@ -25,7 +30,7 @@
     <div class="patientListBar">
         <div class="td name">
             {{ patient.name }}
-            <ElSvgIcon v-if="patient.appStatus" name="ticket" />
+            <ElSvgIcon v-if="patient.appStatus" name="phone_iphone" />
             <ElSvgIcon v-else name="" />
         </div>
         <div class="td id">{{ patient.identification }}</div>
@@ -41,6 +46,7 @@
             <ElBtn v-if="patient.unread != '0' && patient.id != 0" :href="msgHref">{{ patient.unread }}</ElBtn>
         </div>
         <div class="td btn">
+            <ElSvgIcon name="edit" @click="() => emit('editPatient', patient.id)"></ElSvgIcon>
             <ElBtn v-if="patient.id != 0" :href="href">查 看</ElBtn>
         </div>
     </div>
@@ -61,6 +67,7 @@
             height: 55px;
             .td {
                 color: $colorUnFont;
+                &.name .icon{background: transparent;}
             }
             @include setRWD(600px) {
                 display: none;
@@ -76,8 +83,11 @@
             &.name {
                 grid-area: name;
                 .icon {
-                    @include setSize(20px, 20px);
+                    @include setSize(32px, 32px);
                     fill: $colorMain;
+                    padding: 6px;
+                    background: #ddd;
+                    border-radius: 50%;
                 }
             }
             &.id { grid-area: id; }
@@ -100,6 +110,15 @@
             &.btn {
                 grid-area: btn;
                 justify-content: flex-end;
+                gap: 15px;
+                .icon {
+                    fill: $colorMain;
+                    @include setSize(35px, 35px);
+                    cursor: pointer;
+                    &:hover{
+                        transform: scale3d(1.1, 1.1, 1);
+                    }
+                }
                 .Btn {
                     background: $colorMain;
                     padding: 20px;
