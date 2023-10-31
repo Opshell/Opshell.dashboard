@@ -29,9 +29,7 @@
 
 <template>
     <header class="headerBlock">
-        <div class="breadcrumbBox">
-            {{ route.meta.title }}
-        </div>
+        <OrgaBreadcrumbs></OrgaBreadcrumbs>
 
         <ElInputBox fieldName="搜尋" class="searchBlock">
             <ElInput placeholder="請輸入關鍵字" suffix-icon="el-icon-search"></ElInput>

@@ -7,8 +7,6 @@
     getData('/mapi/user/getMenu').then((result) => {
         if (result && result.status) {
             list.value = result.data;
-
-            console.log('menu', list.value);
         }
     });
 </script>

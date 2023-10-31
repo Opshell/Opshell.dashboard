@@ -205,7 +205,7 @@ export default [
                         {
                             "id": 101,
                             "parent_id": 10,
-                            "title": "UI/UX View",
+                            "title": "UI/UX",
                             "icon": "database",
                             "hide_sub": 1,
                             "link": "/develop/ui-ux-set"

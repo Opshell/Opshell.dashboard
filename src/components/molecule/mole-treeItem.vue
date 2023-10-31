@@ -53,7 +53,6 @@
      * @param {*} boxh  // 盒子高度
      */
     const calcHeight = (i: number, boxh: number) => {
-        console.log('calcHeight', i, boxh);
         list.value[i].boxHeight = Number(list.value[i].boxHeight) + Number(boxh);
         if (props.depth != 0) {
             emit('calcHeight', boxh);

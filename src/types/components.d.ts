@@ -41,6 +41,7 @@ declare module 'vue' {
     OrgaAccount: typeof import('./../components/organism/orga-account.vue')['default']
     OrgaAddPatient: typeof import('./../components/organism/orga-addPatient.vue')['default']
     OrgaAlbum: typeof import('./../components/organism/orga-album.vue')['default']
+    OrgaBreadcrumbs: typeof import('./../components/organism/orga-breadcrumbs.vue')['default']
     OrgaFooter: typeof import('./../components/organism/orga-footer.vue')['default']
     OrgaHeader: typeof import('./../components/organism/orga-header.vue')['default']
     OrgaImgMark: typeof import('./../components/organism/orga-imgMark.vue')['default']

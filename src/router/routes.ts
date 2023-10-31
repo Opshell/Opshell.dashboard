@@ -90,19 +90,19 @@ const routes: RouteRecordRaw[] = [
         path: '/develop',
         component: () => import('@/pages/develop/index.vue'),
         redirect: '/develop/ui-ux-set',
-        meta: { title: '開發用頁面', icon: 'address-book' },
+        meta: { title: '工程模式', icon: 'dashboard' },
         children: [
             {
                 name: 'UIUXSet',
                 path: 'ui-ux-set',
                 component: () => import('@/pages/develop/UIUXSet.vue'),
-                meta: { title: '主題樣式', icon: 'address-book' },
+                meta: { title: 'UI/UX', icon: 'database' },
             },
             {
                 name: 'IconList',
                 path: 'icon-list',
                 component: () => import('@/pages/develop/IconList.vue'),
-                meta: { title: 'Icon列表', icon: 'address-book' },
+                meta: { title: '圖標列表', icon: 'grid' },
             },
         ]
     },
