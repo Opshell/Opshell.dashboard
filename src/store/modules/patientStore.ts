@@ -11,40 +11,27 @@ export interface iPatientState {
         next: string; // 下次回診時間
         doctor: string;
     },
-    tube: {
-        position: string; // 廔管位置
-        surgery: string; // 術式
-        order: string; // 吻合位置
-    },
-    questionnaire: {
-        swelling: string; // 腫脹
-        venousPressure: string; // 靜脈壓力
-        tubeStatus: string; // 廔管狀況
-    },
+    text_record: string; // 廔管建置狀況
+    survey: string;  // 問卷
 }
 
+const StateDefault: iPatientState = {
+    info: {
+        id: 0,
+        name: '',
+        uid: '', // 身分證字號
+        age: 0,
+        place: '',
+        next: '', // 下次回診時間
+        doctor: '',
+    },
+    text_record: '',
+    survey: '',
+};
+
+// action
 const usePatientStore = defineStore('usePatientStore', () => {
-    const patientState = reactive({
-        info: {
-            id: 0,
-            name: '',
-            uid: '', // 身分證字號
-            age: 0,
-            place: '',
-            next: '', // 下次回診時間
-            doctor: '',
-        },
-        tube: {
-            position: '', // 廔管位置
-            surgery: '', // 術式
-            order: '', // 吻合位置
-        },
-        questionnaire: {
-            swelling: '', // 腫脹
-            venousPressure: '', // 靜脈壓力
-            tubeStatus: '', // 廔管狀況
-        },
-    });
+    let patientState: iPatientState = reactive({...StateDefault});
 
     // 登入
     const setPatient = (data: string) => {
@@ -52,9 +39,21 @@ const usePatientStore = defineStore('usePatientStore', () => {
         patientState.info = JSON.parse(data);
     };
 
+    const resetPatient = () => {
+        // [-]解構賦值的話  pinia 工具會有顯示問題 assign 則正常工作 雖然最終結果相同
+        // patientState = {...StateDefault};
+        Object.assign(patientState, StateDefault);
+    }
+
+    const updatePatient = (data: iPatientState) => {
+        Object.assign(patientState, data);
+    }
+
     return {
         patientState,
         setPatient,
+        resetPatient,
+        updatePatient
     }
 });
 

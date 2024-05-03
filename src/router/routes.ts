@@ -1,117 +1,103 @@
 import { RouteRecordRaw } from 'vue-router';
 
+import adminRoutes from './modules-routes';
+import clientRoutes from './modules/client-routes';
+import { RouteRecordRaw, RouteLocationNormalized } from 'vue-router';
+
 const routes: RouteRecordRaw[] = [
     {
-        name: 'Login',
-        path: '/login',
-        component: () => import('@/pages/Login.vue'),
-        meta: { title: '登入', icon: 'address-book' },
+        name: 'Home',
+        path: '/',
+        redirect: '/develop/ui-kit',
+        // component: () => import('@/pages/client/Home.vue'),
+        meta: { title: '首頁', icon: 'home' },
     },
     {
-        name: 'Forget',
-        path: '/forget',
-        component: () => import('@/pages/Forget.vue'),
-        meta: { title: '忘記密碼', icon: 'address-book' },
-    },
-    {
-        name: 'PatientList',
-        path: '/patient-list',
-        component: () => import('@/pages/PatientList.vue'),
-        meta: { requireAuth: true, title : '患者列表', icon: 'address-book' },
-        redirect: '/patient-list/1',
+        name: 'Admin',
+        path: '',
+        component: () => import('@/pages/index.vue'),
+        meta: { title : `${__TITLE__} - 後臺`, icon: 'ballot' },
+        redirect: '/develop/ui-kit',
         children: [
             {
-                name: 'patient-list-p',
-                path: ':page',
-                component: () => import('@/components/organism/orga-patientTbody.vue'),
-                meta: { requireAuth: true, title: '患者列表', icon: 'address-book' },
-                // props: () => ({ patientList: [] })
-            },
-        ]
-    },
-    {
-        name: 'Patient',
-        path: '/patient/:pid',
-        component: () => import('@/pages/Patient.vue'),
-        meta: { requireAuth: true, title: '患者資料', icon: 'address-book' },
-        children: [
-            {
-                name: 'TubeInfo',
-                path: 'tube-info',
-                component: () => import('@/pages/patient/TubeInfo.vue'),
-                meta: { requireAuth: true, title: '廔管資料', icon: 'address-book' },
-            },
-            {
-                name: 'SurgeryRecords',
-                path: 'surgery-records',
-                component: () => import('@/pages/patient/SurgeryRecords.vue'),
-                meta: { requireAuth: true, title: '手術紀錄', icon: 'address-book' },
-            },
-            {
-                name: 'OutpatientRecords',
-                path: 'outpatient-records',
-                component: () => import('@/pages/patient/OutpatientRecords.vue'),
-                meta: { requireAuth: true, title: '回診紀錄', icon: 'address-book' },
-                redirect: 'outpatient-records/1',
+                name: 'Develop',
+                path: 'develop',
+                redirect: '/develop/ui-kit',
+                meta: { title: '開發輔助', icon: 'address-book' },
                 children: [
                     {
-                        name: 'OutpatientRecordsList',
-                        path: ':page(\\d+)',
-                        component: () => import('@/components/organism/orga-outPatientTbody.vue'),
-                        meta: { requireAuth: true, title: '患者列表', icon: 'address-book' },
-                        // props: () => ({ patientList: [] })
+                        name: 'UIKit',
+                        path: 'ui-kit',
+                        component: () => import('@/pages/develop/UIKit.vue'),
+                        meta: {
+                            title: 'UI Kit',
+                            icon: 'cards',
+                            summary: '設計風格、主題樣式與元件展示頁面。',
+                        },
+                    }, {
+                        name: 'IconList',
+                        path: 'icon-list',
+                        component: () => import('@/pages/develop/IconList.vue'),
+                        meta: {
+                            title: 'Icon庫',
+                            icon: 'grid_view',
+                            summary: '網站使用的圖示列表，點選圖示可以直接複製icon name。',
+                        },
                     },
-                ]
-            },
-            {
-                name: 'MessageBoard',
-                path: 'message-board',
-                component: () => import('@/pages/patient/MessageBoard.vue'),
-                meta: { requireAuth: true, title: '留言板', icon: 'address-book' },
-            },
-            {
-                name: 'DataAnalysis',
-                path: 'data-analysis',
-                component: () => import('@/pages/patient/DataAnalysis.vue'),
-                meta: { requireAuth: true, title: '數據分析', icon: 'address-book' },
+                ],
+                beforeEnter: async (to, from) => {
+
+                },
+            }, {
+                name: 'Project',
+                path: 'project',
+                meta: { title: '作品集', icon: 'photo_library' },
+                children: [
+                    {
+                        name: 'project-list',
+                        path: 'list',
+                        component: () => import('@/pages/ProjectList.vue'),
+                        meta: { title: '作品管理', icon: 'photo_library' },
+                        redirect: '/project/list/1',
+                        children: [
+                            {
+                                path: ':page(\\d+)',
+                                component: () => import('@/components/orga/list.vue'),
+                                meta: {
+                                    title: '作品集',
+                                    icon: 'photo_library',
+                                    summary: '作品集列表頁'
+                                },
+                            },
+                        ]
+                    }, {
+                        name: 'project-info',
+                        path: 'info/:id(\\d+)',
+                        component: () => import('@/pages/ProjectInfo.vue'),
+                        meta: { title: '作品內容', icon: 'address-book' },
+                    }, {
+                        name: 'category',
+                        path: 'category',
+                        component: () => import('@/pages/develop/UIKit.vue'),
+                        meta: { title: 'UI Kit', icon: 'address-book' },
+                    }, {
+                        name: 'tag',
+                        path: 'tag',
+                        component: () => import('@/pages/develop/IconList.vue'),
+                        meta: { title: 'Icon列表', icon: 'address-book' },
+                    },
+                ],
+            }, {
+                // 未定義網址 => 404
+                name: 'PageNotFound',
+                path: '/:pathMatch(.*)*',
+                component: () => import('@/pages/PageNotFound.vue'),
+                meta: { title: '頁面不存在!!', icon: 'cross-circle' },
             },
         ],
-        beforeEnter: function (to) {
-            if (to.path === `/patient/${to.params?.pid}`) { // 如果是剛進病患頁面
+        beforeEnter: async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
 
-                const params = { pid: to.params?.pid, p: 1 };
-
-                return {name: 'OutpatientRecordsList', params}; // 就去導向回診紀錄 [#] 之後要改成廔管
-            }
         }
-    },
-    {
-        name: 'Develop',
-        path: '/develop',
-        component: () => import('@/pages/develop/index.vue'),
-        redirect: '/develop/ui-ux-set',
-        meta: { title: '開發用頁面', icon: 'address-book' },
-        children: [
-            {
-                name: 'UIUXSet',
-                path: 'ui-ux-set',
-                component: () => import('@/pages/develop/UIUXSet.vue'),
-                meta: { title: '主題樣式', icon: 'address-book' },
-            },
-            {
-                name: 'IconList',
-                path: 'icon-list',
-                component: () => import('@/pages/develop/IconList.vue'),
-                meta: { title: 'Icon列表', icon: 'address-book' },
-            },
-        ]
-    },
-    {
-        // 未定義網址 => 404
-        name: 'PageNotFound',
-        path: '/:pathMatch(.*)*',
-        component: () => import('@/pages/PageNotFound.vue'),
-        meta: { title: '頁面不存在!!', icon: 'cross-circle' },
     },
 ];
 

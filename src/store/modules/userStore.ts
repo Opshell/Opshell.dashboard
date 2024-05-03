@@ -10,6 +10,20 @@ enum PERMISSION_LEVEL {
     VISITOR, // 3 訪客
 }
 
+// 宣告、並匯出user的State
+export interface iUserState {
+    isLogin: boolean; // 是否有登入
+    jwtToken: string;
+    userData: {
+        id: number;
+        uid: string;
+        user: string;
+        name: string;
+        auth: PERMISSION_LEVEL;
+        authLevel: string;
+    };
+}
+
 const useUserStore = defineStore('useUserStore', () => {
     const userState = reactive({
         isLogin: false,
@@ -17,8 +31,11 @@ const useUserStore = defineStore('useUserStore', () => {
         refreshToken: '',
         user: {
             id: 0,
+            uid: '',
             name: '',
+            avatar: '/assets/images/system_logo.jpg',
             auth: PERMISSION_LEVEL.VISITOR,
+            authLevel: '訪客'
         }
     });
 
@@ -43,6 +60,11 @@ const useUserStore = defineStore('useUserStore', () => {
     const setToken = (JWT: string, refreshToken: string) => {
         userState.jwtToken = JWT;
         userState.refreshToken = refreshToken;
+
+
+        // 為了安全改成 cookie read only
+        // document.cookie = `jwtToken=${JWT}; path=/; max-age=${60 * 60 * 24 * 7}`; // 紀錄 token 在 cookie
+        // document.cookie = `refreshToken=${refreshToken}; path=/; max-age=${60 * 60 * 24 * 7}`; // 刷新用token
 
         localStorage.setItem('jwtToken', JWT); // 紀錄 token 在 localStorage
         localStorage.setItem('refreshToken', refreshToken); // 刷新用token

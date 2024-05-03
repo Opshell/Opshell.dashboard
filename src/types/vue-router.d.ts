@@ -5,6 +5,7 @@ declare module 'vue-router' {
 
     title?: string // 路由名稱
     icon?: string // 路由Icon (name)
+    summary?: string // 路由摘(頁面功能描述)
 
     // hidden?: boolean // 預設false, true 的时候該路由不會在側邊攔出現
 

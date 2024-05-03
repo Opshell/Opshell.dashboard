@@ -1,0 +1,105 @@
+$colorBack: #f2f2f2; // 最底底色(body)
+$colorViewBack: #fff; // 可視區主要背景色
+
+// $colorMain: #12A6B7; // 主色
+$colorMain: #e6b42c; // 主色
+$colorSubs: #3e74b3; // 輔色
+
+$colorInputBack: #F4F4F3; // 元件底色
+$colorFont: #A7A7A7; // 基礎文字顏色
+$colorUnFont: #FCFCFC; // 反轉文字顏色
+
+// 狀態色
+$colorError: #CB1E1E;
+$colorSuccess: #16a850;
+$colorWarning: #EFD218;
+$colorInfo: #12a6b7;
+
+// 社群色
+$colorFB  : #3b5998;
+$colorLINE: #00BA01;
+$colorTWIT: #1DA1F2;
+
+// 預設文字樣式
+%baseFont {
+    fill: var(--color-primary);
+    color: var(--color-text);
+    font-size: 16px;
+    font-family: 'Roboto', 'NotoSansTC', '微軟正黑體', 'Arial', sans-serif;
+    -webkit-text-stroke: 0.1px;
+    letter-spacing: 1px;
+
+    @include setRWD(1200px) {
+        font-size: 14px;
+    }
+
+    @include setRWD(600px) {
+        font-size: 12px;
+    }
+}
+
+// 大區域 範圍設定
+%scope {
+    width: 100%;
+    max-width: 1610px;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    margin: 0 auto;
+
+    @include setRWD (1680px) {
+        padding-left: 1.875rem;
+        padding-right: 1.875rem;
+    }
+
+    @include setRWD (1024px) {
+        padding-left: 1.428rem;
+        padding-right: 1.428rem;
+    }
+
+    @include setRWD (600px) {
+        padding-left: .83rem;
+        padding-right: .83rem;
+    }
+}
+
+$shadow: 0 0 1px 0 rgba(0, 0, 0, .15);
+$shadow-in: 0 0 1px 0 rgba(0, 0, 0, .15) inset;
+
+$cubic-FiSo: cubic-bezier(.37, .99, .92, .96); //快進場緩停
+$cubic-FiFo: cubic-bezier(.25, .65, .85, .45); //快進快出
+$cubic-SiRo: cubic-bezier(.31, 1.26, .19, 1.11); //快速回彈
+$cubic-SiMo: cubic-bezier(.3, 1, .94, 1.1); //緩進微彈
+
+// 設定卷軸樣式
+@mixin setScroll($size: 10px) {
+    // 卷軸體
+    &::-webkit-scrollbar {
+        background: var(--color-primary);
+        width: $size;
+        border-radius: calc($size / 2);
+    }
+    // 卷軸底
+    &::-webkit-scrollbar-thumb {
+        background: #fff;
+        border-radius: calc($size / 2);
+        border: 0.5px solid rgba(153, 153, 153, 0.25);
+        // box-shadow: 0 0 10px 2px #20476e;
+    }
+
+    // 卷軸按鈕
+    // &::-webkit-scrollbar-button {
+    //     background: transparent; // 設定transparent會隱藏按鈕
+    //     border-radius: 4px;
+    // }
+    // &::-webkit-scrollbar-track-piece {
+    //     background: transparent; // 設定transparent會隱藏卷軸底
+    // }
+
+    // 卷軸底底 (可以幫卷軸底加陰影
+    // &::-webkit-scrollbar-track {
+    //     box-shadow: transparent;
+    // }
+}
+
+// 動畫
+@import 'animate';

@@ -47,47 +47,19 @@
 //     transform: scale3d(1.25, 1.25, 1);
 // }
 
-
-// 放大 淡入淡出
-.zoomY-enter-active,
-.zoomY-leave-active {
-    transition: .2s $cubic-SiRo;
-}
-.zoomY-enter-from,
-.zoomY-leave-to {
-    opacity: 0;
-    transform: scale3d(1, 1.1, 1);
-}
-
-
 // 垂直位移淡入淡出
 .fadeY-enter-active,
 .fadeY-leave-active {
-    transition: .3s $cubic-FiSo;
+    transition: .2s $cubic-FiSo;
 }
 .fadeY-enter-from {
     opacity: 0;
-    transform: translateY(-100px);
+    transform: translateY(60px);
 }
 .fadeY-leave-to {
     opacity: 0;
-    transform: translateY(100px);
+    transform: translateY(-60px);
 }
-
-// 反向 - 垂直位移淡入淡出
-.fadeYres-enter-active,
-.fadeYres-leave-active {
-    transition: .3s $cubic-FiSo;
-}
-.fadeYres-enter-from,
-.fadeYres-leave-to {
-    opacity: 0;
-    transform: translateY(100px);
-}
-// .fadeYres-leave-to {
-//     opacity: 0;
-//     transform: translateY(-100px);
-// }
 
 // 水平位移淡入淡出
 .fadeX-enter-active,
@@ -133,8 +105,38 @@
 }
 
 
+// [-] Group 用
+.list-move, /* 对移动中的元素应用的过渡 */
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    // transform: scale3d(0.8, 0.8, 1);
+}
+/* 确保将离开的元素从布局流中删除
+  以便能够正确地计算移动的动画。 */
+.list-leave-active {
+    position: absolute;
+}
 
 
+.page-move, /* 对移动中的元素应用的过渡 */
+.page-enter-active,
+.page-leave-active {
+    transition: all 0.35s ease;
+}
+.page-enter-from,
+.page-leave-to {
+    opacity: 0;
+    transform: transform(-200px, -400px);
+}
+.page-leave-active {
+    position: absolute;
+}
 
 // 純動畫
 @keyframes horizontally-shake{
@@ -145,3 +147,11 @@
     80% { transform: translate3d(-10px, 0, 0); }
     100%{ transform: translate3d(0, 0, 0); }
 }
+
+// 純動畫
+@keyframes fade-in{
+     0% { opacity: 0; }
+    100%{ opacity: 1; }
+}
+
+

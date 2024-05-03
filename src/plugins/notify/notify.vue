@@ -35,7 +35,7 @@
             <div class="duration" :style="styleData"></div>
 
             <header class="header">
-                <ElSvgIcon name="comment-info" />
+                <ElSvgIcon name="error" />
                 <div v-html="title"></div>
             </header>
             <div class="content" v-html="message"></div>
@@ -114,8 +114,8 @@
             min-height: 130px;
             padding: 15px 20px;
             color: #333;
-            font-size: 16px;
-            line-height: 1em;
+            font-size: 18px;
+            line-height: 1.6em;
             white-space: pre-line; // 遇到換行符號會換行
         }
         .btnBox {

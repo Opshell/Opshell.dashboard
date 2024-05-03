@@ -45,10 +45,10 @@ export default [
         method: 'post',
         response: ({ body }) => {
             const { username, password } = body;
-            if (username === 'Opshell' && password === 'password') {
+            if (username === 'admin' && password === 'admin') {
                 const jwtService = new JwtService(secretKey);
                 // 生成 JWT
-                const payload: JwtPayload = { id: '1', name: 'Opshell', auth: 0 };
+                const payload: JwtPayload = { id: '1', name: 'Opshell', authLevel: 'Top Admin', uid: 'ead2577489'};
                 const token = jwtService.generateToken(payload);
 
                 return {
@@ -130,33 +130,93 @@ export default [
                     "id": 6,
                     "parent_id": 0,
                     "title": "文章",
-                    "icon": "notebook",
+                    "icon": "description",
                     "hide_sub": 1,
-                    "link": "/articleList"
+                    "link": "/article",
+                    "child": [
+                        {
+                            "id": 61,
+                            "parent_id": 6,
+                            "title": "文章分類",
+                            "icon": "book_2",
+                            "hide_sub": 1,
+                            "link": "/article/category"
+                        },
+                        {
+                            "id": 62,
+                            "parent_id": 6,
+                            "title": "文章標籤",
+                            "icon": "document_scanner",
+                            "hide_sub": 1,
+                            "link": "/article/tag"
+                        },
+                        {
+                            "id": 63,
+                            "parent_id": 6,
+                            "title": "文章管理",
+                            "icon": "task",
+                            "hide_sub": 1,
+                            "link": "/article/list"
+                        },
+                    ]
+                },
+                {
+                    "id": 16,
+                    "parent_id": 0,
+                    "title": "作品集",
+                    "icon": "photo_library",
+                    "hide_sub": 1,
+                    "link": "/project",
+                    "child": [
+                        {
+                            "id": 161,
+                            "parent_id": 6,
+                            "title": "作品分類",
+                            "icon": "book_2",
+                            "hide_sub": 1,
+                            "link": "/project/category/list"
+                        },
+                        {
+                            "id": 162,
+                            "parent_id": 6,
+                            "title": "作品標籤",
+                            "icon": "document_scanner",
+                            "hide_sub": 1,
+                            "link": "/project/tag/list"
+                        },
+                        {
+                            "id": 163,
+                            "parent_id": 6,
+                            "title": "作品管理",
+                            "icon": "photo_library",
+                            "hide_sub": 1,
+                            "link": "/project/list"
+                        },
+                    ]
                 },
                 {
                     "id": 10,
                     "parent_id": 0,
-                    "title": "工程模式",
-                    "icon": "dashboard",
+                    "title": "開發輔助",
+                    "icon": "settings_applications",
                     "hide_sub": 1,
-                    "link": "",
+                    "link": "/develop",
                     "child": [
                         {
                             "id": 101,
                             "parent_id": 10,
-                            "title": "UI/UX View",
-                            "icon": "database",
+                            "title": "UI kit",
+                            "icon": "cards",
                             "hide_sub": 1,
-                            "link": "/develop/ui-ux-set"
+                            "link": "/develop/ui-kit",
                         },
                         {
                             "id": 102,
                             "parent_id": 10,
-                            "title": "圖標總覽",
-                            "icon": "grid",
+                            "title": "Icon庫",
+                            "icon": "grid_view",
                             "hide_sub": 1,
-                            "link": "/develop/icon-list"
+                            "link": "/develop/icon-list",
                         },
                     ]
                 },
@@ -166,23 +226,23 @@ export default [
                     "title": "後台管理",
                     "icon": "folder",
                     "hide_sub": 1,
-                    "link": "",
+                    "link": "/dashboard",
                     "child": [
                         {
                             "id": 2,
                             "parent_id": 1,
                             "title": "權限群組",
-                            "icon": "fingerprint",
+                            "icon": "lock_person",
                             "hide_sub": 1,
-                            "link": "/group"
+                            "link": "/dashboard/auth"
                         },
                         {
                             "id": 3,
                             "parent_id": 1,
                             "title": "後台帳號",
-                            "icon": "user",
+                            "icon": "person",
                             "hide_sub": 1,
-                            "link": "/admin"
+                            "link": "/dashboard/user"
                         },
                         {
                             "id": 4,
@@ -190,7 +250,7 @@ export default [
                             "title": "網站設定",
                             "icon": "folder",
                             "hide_sub": 1,
-                            "link": "",
+                            "link": "/dashboard/settings",
                             "child": [
                                 {
                                     "id": 9,
@@ -198,15 +258,15 @@ export default [
                                     "title": "基本設定",
                                     "icon": "settings",
                                     "hide_sub": 1,
-                                    "link": "/setting"
+                                    "link": "/dashboard/settings/setting"
                                 },
                                 {
                                     "id": 8,
                                     "parent_id": 4,
                                     "title": "SEO 管理",
-                                    "icon": "chart-network",
+                                    "icon": "location_searching",
                                     "hide_sub": 1,
-                                    "link": "/seo"
+                                    "link": "/dashboard/settings/seo"
                                 }
                             ]
                         },
@@ -214,9 +274,9 @@ export default [
                             "id": 5,
                             "parent_id": 1,
                             "title": "功能表單",
-                            "icon": "layers",
+                            "icon": "dns",
                             "hide_sub": 1,
-                            "link": "/sectionList"
+                            "link": "/dashboard/section-list"
                         }
                     ]
                 }
@@ -231,5 +291,4 @@ export default [
             return result;
         },
     },
-
 ] as MockMethod[];
