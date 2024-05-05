@@ -14,8 +14,8 @@
                 <span v-if="route.meta.summary" class="summary">{{ route.meta.summary }}</span>
             </div>
 
-            <div class="tabs-block">
-                <slot name="header-features"></slot>
+            <div class="features-block">
+                <slot name="features"></slot>
             </div>
         </header>
 
@@ -65,6 +65,11 @@
                     color: var(--color-text);
                     font-size: 1.125rem;
                 }
+            }
+
+            .features-block {
+                @include setFlex(flex-end, center, 10px);
+                min-width: 280px;
             }
         }
 

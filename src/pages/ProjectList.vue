@@ -127,7 +127,7 @@
 
 <template>
     <OrgaContentBlock class="project-list-block">
-        <template #header-features>
+        <template #features>
             <div class="tabs-block"></div>
         </template>
 

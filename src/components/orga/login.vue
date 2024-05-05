@@ -161,7 +161,7 @@
         }
 
         .input-block {
-            @include setFlex(flex-start, center, 15px, column);
+            @include setFlex(flex-start, stretch, 15px, column);
             .inputBox {
                 position: relative;
                 width: 100%;

@@ -353,6 +353,10 @@
                 </div>
             </MoleWaterfallsFlowCard>
 
+            <MoleWaterfallsFlowCard>
+                <ElUploader />
+            </MoleWaterfallsFlowCard>
+
             <MoleWaterfallsFlowCard title="Date Picker">
                 <ElInputBox field-name="Birthday">
                     <MoleDatePicker />

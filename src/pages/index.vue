@@ -159,51 +159,51 @@
                 padding: 0;
             }
         }
-    }
 
-    .features-block {
-        flex-shrink: 0;
-        @include setFlex(center, center, 0, column);
-        background:  var(--color-view-block);
-        @include setSize(100%, 100%);
-        max-width: 100%;
-        transition: 0.2s $cubic-FiSo;
-        .weather-date-block {
-            padding: 15px 20px;
-            width: 100%;
-            .weather-date-box {
-                @include setFlex(space-between);
-                gap: 10px;
-                padding: 5px 10px;
-                border-radius: 5px;
-                border: 1px solid var(--color-border-box);
-                font-size: 14px;
-                font-weight: 600;
+        > .features-block {
+            flex-shrink: 0;
+            @include setFlex(center, center, 0, column);
+            background:  var(--color-view-block);
+            @include setSize(100%, 100%);
+            max-width: 100%;
+            transition: 0.2s $cubic-FiSo;
+            .weather-date-block {
+                padding: 15px 20px;
+                width: 100%;
+                .weather-date-box {
+                    @include setFlex(space-between);
+                    gap: 10px;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    border: 1px solid var(--color-border-box);
+                    font-size: 14px;
+                    font-weight: 600;
+                }
             }
         }
-    }
 
-    .view-block {
-        @include setFlex(space-between, stretch, 0, column);
-        background: var(--color-view-block);
-        @include setSize();
-        padding: 20px 15px 20px 0;
-        transition: 0.3s $cubic-FiSo 0.08s,
-                    background-color .2s $cubic-FiSo;
-        overflow: hidden;
-        .content-block {
-            flex: 1;
-            position: relative;
-            background: var(--color-border-box);
-            @include setSize(100%, calc(100% - 95px));
-            border-radius: 20px 0 0 0;
-            .loadingMask {
-                position: absolute;
-                top: 0;
-                left: 0;
-                background: var(--color-text-light);
-                @include setSize(100%, 100%);
-                z-index: 1;
+        > .view-block {
+            @include setFlex(space-between, stretch, 0, column);
+            background: var(--color-view-block);
+            @include setSize();
+            padding: 20px 15px 20px 0;
+            transition: 0.3s $cubic-FiSo 0.08s,
+                        background-color .2s $cubic-FiSo;
+            overflow: hidden;
+            .content-block {
+                flex: 1;
+                position: relative;
+                background: var(--color-border-box);
+                @include setSize(100%, calc(100% - 95px));
+                border-radius: 20px 0 0 0;
+                .loadingMask {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    background: var(--color-text-light);
+                    @include setSize(100%, 100%);
+                    z-index: 1;
+                }
             }
         }
     }

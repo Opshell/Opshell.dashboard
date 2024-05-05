@@ -7,27 +7,26 @@
 
     const toolbar = [
         ['viewsource'],
-        [
+        ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript',
             {
-                label: $q.lang.editor.align,
+                // label: '文字對齊方式', // $q.lang.editor.align
                 icon: $q.iconSet.editor.align,
                 fixedLabel: true,
                 list: 'only-icons',
                 options: ['left', 'center', 'right', 'justify']
             },
-            {
-                label: $q.lang.editor.align,
-                icon: $q.iconSet.editor.align,
-                fixedLabel: true,
-                options: ['left', 'center', 'right', 'justify']
-            }
+            // {
+            //     label: $q.lang.editor.align,
+            //     icon: $q.iconSet.editor.align,
+            //     fixedLabel: true,
+            //     options: ['left', 'center', 'right', 'justify']
+            // }
         ],
-        ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
         ['image', 'file', 'video'],
         ['token', 'hr', 'link', 'custom_btn'],
         [
             {
-                label: $q.lang.editor.formatting,
+                // label: $q.lang.editor.formatting,
                 icon: $q.iconSet.editor.formatting,
                 list: 'no-icons',
                 options: [
@@ -42,7 +41,7 @@
                 ]
             },
             {
-                label: $q.lang.editor.fontSize,
+                // label: $q.lang.editor.fontSize,
                 icon: $q.iconSet.editor.fontSize,
                 fixedLabel: true,
                 fixedIcon: true,
@@ -58,7 +57,7 @@
                 ]
             },
             {
-                label: $q.lang.editor.defaultFont,
+                // label: $q.lang.editor.defaultFont,
                 icon: $q.iconSet.editor.font,
                 fixedIcon: true,
                 list: 'no-icons',
@@ -105,5 +104,7 @@
 </template>
 
 <style lang="scss">
-
+    .q-editor__content {
+        height: 750px;
+    }
 </style>

@@ -1,12 +1,16 @@
 <script setup lang="ts">
-    const props = defineProps({
-        fieldName: { type: String, required: true, default: '' },
-        remark: { type: String, default: '' },
+    withDefaults(defineProps<{
+        fieldName?: string,
+        type?: 'row' | 'column',
+        remark?: string,
+    }>(), {
+        fieldName: '',
+        type: 'column'
     });
 </script>
 
 <template>
-    <label class="inputBox">
+    <label class="input-box" :class="{ row: type === 'row' }">
         <span class="text">{{ fieldName }}</span>
         <slot></slot>
         <span v-if="remark != ''" class="remark">{{ remark }}</span>
@@ -14,22 +18,29 @@
 </template>
 
 <style lang="scss">
-    .inputBox {
+    .input-box {
         position: relative;
-        @include setFlex(space-between, center, 5px);
-        // background: #f8f8f8;
-        // min-height: 55px;
-        padding: 0 0 0 12px;
-        border-radius: 20px;
-        &.radio {
-            justify-content: flex-start;
-        }
+        @include setFlex(space-between, flex-start, 5px, column);
         > .text {
             flex-shrink: 0;
-            color: var(--themeColor);
-            white-space: nowrap;
-            user-select: none;
-            cursor: pointer;
+            color: var(--color-text);
+            font-weight: 300;
+            font-size: .875rem;
+            line-height: 1.188rem;
+        }
+
+        &.row {
+            flex-direction: row;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 10px;
+            > .text {
+                flex-shrink: 0;
+                color: var(--color-text);
+                font-weight: 300;
+                font-size: 2rem;
+                line-height: 1;
+            }
         }
     }
 </style>

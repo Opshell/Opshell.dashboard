@@ -82,23 +82,57 @@
             query: {}
         });
     }
-
-
 </script>
 
 <template>
     <OrgaContentBlock class="project-info-block">
         <template #title>
-            <ElInputBox field-name="標題">
-                <ElInput v-model="info.title" placeholder="請輸入標題" />
-            </ElInputBox>
+            <div class="title-box">
+                <ElInputBox field-name="標題" type="row">
+                    <ElInput v-model="info.title" placeholder="請輸入標題" />
+                </ElInputBox>
+
+                <ElInputBox>
+                    <span>最後更新時間：{{ info.updated_at }}</span>
+                    <span>資料建立時間：{{ info.created_at }}</span>
+                </ElInputBox>
+            </div>
         </template>
-        <template #header>
-            <div class="features-block"></div>
+        <template #features>
+            <ElBtn>
+                <template #icon>
+                    <ElSvgIcon name="cance" />
+                </template>
+                取消
+            </ElBtn>
+
+            <ElBtn>
+                <template #icon>
+                    <ElSvgIcon name="save" />
+                </template>
+                儲存
+            </ElBtn>
         </template>
 
         <div class="info-block">
             <ElEditor v-model="info.description"/>
+            <div class="specification-block">
+                <ElInputBox field-name="作品主圖">
+                    <ElInput v-model="info.created_at" readonly />
+                </ElInputBox>
+                <ElInputBox field-name="作品分類">
+                    <ElInput v-model="info.updated_at" readonly />
+                </ElInputBox>
+                <ElInputBox field-name="作品標籤">
+                    <ElInput v-model="info.updated_at" readonly />
+                </ElInputBox>
+                <ElInputBox field-name="排序">
+                    <ElInput v-model="info.updated_at" readonly />
+                </ElInputBox>
+                <ElInputBox field-name="狀態">
+                    <ElInput v-model="info.updated_at" readonly />
+                </ElInputBox>
+            </div>
         </div>
 
         <template #footer-features>
@@ -111,31 +145,23 @@
 
 <style lang="scss">
     .project-info-block {
-        .feature-block {
-            @include setFlex(space-between, stretch, .625rem);
-            gap: .625rem;
-            width: 100%;
-            margin: 1.875rem 0 1.25rem;
-
-            .feature-box {
-                @include setFlex( flex-start, stretch, .625rem);
-            }
-
-            .el-btn,
-            .divider,
-            .el-select,
-            .el-input { height: 40px; }
-
-            .el-input { max-width: 230px; }
-            .el-btn { padding: 8px 15px; }
-
-            .list-composition-box {
-                @include setFlex( flex-end, stretch, .625rem);
-            }
+        .title-box {
+            @include setFlex(flex-start, stretch, 30px);
         }
 
         .info-block {
             padding-top: 2.5rem;
+            @include setFlex(space-between, stretch, 1.25rem);
+            .q-editor {
+                width: 100%;
+            }
+
+            .specification-block {
+                flex-shrink: 0;
+                @include setFlex(flex-start, stretch, 1rem, column);
+                width: 100%;
+                max-width: 380px;
+            }
         }
     }
 </style>

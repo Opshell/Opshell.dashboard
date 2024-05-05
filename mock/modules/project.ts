@@ -278,4 +278,20 @@ export default [
             };
         },
     },
+    { // 上傳影像
+        url: '/mapi/image/upload',
+        method: 'post',
+        response: (request) => {
+
+
+            console.log('request：', request);
+            const img = '/upload/tube_pic.png';
+
+            return {
+                status: 0,
+                message: `上傳圖片成功`,
+                data: img
+            };
+        },
+    },
 ] as MockMethod[];
