@@ -67,7 +67,7 @@
         .notifyWrap {
             @include setFlex(space-between, stretch, 0, column);
             position: relative;
-            background: $colorBack;
+            background: var(--color-view-block);
             @include setSize(100%, auto);
             max-width: 350px;
             // max-height: 250px;
@@ -129,45 +129,45 @@
 
         &.warning {
             .header {
-                background: $colorWarning;
+                background: var(--color-warning);
                 color: #333;
                 .icon {
                     fill: #333;
                 }
             }
             .btnBox .Btn {
-                background: $colorWarning;
-                border-color: $colorWarning;
+                background: var(--color-warning);
+                border-color: var(--color-warning);
                 color: #333;
             }
         }
         &.error {
             .header {
-                background: $colorError;
+                background: var(--color-error);
             }
             .btnBox .Btn {
-                background: $colorError;
-                border-color: $colorError;
+                background: var(--color-error);
+                border-color: var(--color-error);
                 color: #eee;
             }
         }
         &.info {
             .header {
-                background: $colorInfo;
+                background: var(--color-info);
             }
             .btnBox .Btn {
-                background: $colorInfo;
-                border-color: $colorInfo;
+                background: var(--color-info);
+                border-color: var(--color-info);
                 color: #eee;
             }
         }
         &.success {
             .header {
-                background: $colorSuccess;
+                background: var(--color-success);
             }
             .btnBox .Btn {
-                background: $colorSuccess;
-                border-color: $colorSuccess;
+                background: var(--color-success);
+                border-color: var(--color-success);
                 color: #eee;
             }
         }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    const props = withDefaults(defineProps<{
+    withDefaults(defineProps<{
         title?: string;
     }>(), {
         title: '',
@@ -10,7 +10,10 @@
 <template>
     <div class="waterfalls-flow-card">
         <div class="wrap">
-            <h4 class="title" v-html="title"></h4>
+            <h4 class="title">
+                <span>{{ title }}</span>
+                <slot name="icon"></slot>
+            </h4>
             <slot></slot>
         </div>
     </div>
@@ -28,6 +31,7 @@
             padding: 15px;
             overflow: hidden;
             .title {
+                @include setFlex(space-between);
                 margin: 0 0 10px;
                 font-size: 1.2rem;
                 font-weight: 400;

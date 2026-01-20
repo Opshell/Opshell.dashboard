@@ -82,7 +82,7 @@ form{
         }
 
         &::-webkit-scrollbar-thumb {
-            background: $colorMain;
+            background: var(--color-primary);
         }
     }
     textarea{
@@ -107,7 +107,8 @@ a {
 }
 
 //other
-.red{ color: $colorError; fill: $colorError; }
+.emphasis { color: var(--color-primary); font-size: 1.25rem; }
+.red{ color: var(--color-error); fill: var(--color-error); }
 .space{ display: inline-block; width: 7px; }
 .ellipsis{ overflow: hidden; text-overflow: ellipsis; white-space:nowrap; }
 .hidden{ display: none; }

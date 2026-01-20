@@ -222,6 +222,35 @@
             console.log('Cancel');
         });
     }
+
+    const lineProgress = ref(0);
+    // 用settimeout模擬進度條
+    const addProgress = () => {
+        setTimeout(() => {
+            lineProgress.value += 5;
+            if(lineProgress.value >= 100) {
+                lineProgress.value = 100;
+            } else {
+                addProgress();
+            }
+        }, 500);
+    }
+    addProgress();
+
+
+    interface iImgUploader extends Ref{
+        uploadImages: (
+            url: string,
+            formData: { [key:string]: string | number }
+        ) => Promise<giImageData>;
+    }
+    const imgUploaderDom = ref<iImgUploader>(); // REF: 上傳圖片的組件
+    const uploadImage = () => {
+        imgUploaderDom.value?.uploadImages(`/mapi/image/upload`, {})
+        .then((res) => {
+            console.log('uploadImages', res);
+        });
+    }
 </script>
 
 <template>
@@ -353,6 +382,13 @@
                 </div>
             </MoleWaterfallsFlowCard>
 
+            <MoleWaterfallsFlowCard title="Images show and upload">
+                <template #icon>
+                    <ElSvgIcon name="cloud_upload" @click="uploadImage()"/>
+                </template>
+                <MoleImgUpload ref="imgUploaderDom" is-multiple />
+            </MoleWaterfallsFlowCard>
+
             <MoleWaterfallsFlowCard>
                 <ElUploader />
             </MoleWaterfallsFlowCard>
@@ -379,11 +415,10 @@
             </MoleWaterfallsFlowCard>
 
             <MoleWaterfallsFlowCard>
-                <ElProgress :percent="100"/>
-                <ElProgress :percent="60" style-type="circle"/>
+                <ElProgress :percent="lineProgress"/>
+                <ElProgress :percent="60" type="circle"/>
             </MoleWaterfallsFlowCard>
         </OrgaWaterfallsFlow>
-
     </OrgaContentBlock>
 </template>
 

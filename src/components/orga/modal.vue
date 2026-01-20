@@ -82,7 +82,7 @@
                 }
                 // 卷軸底
                 &::-webkit-scrollbar-thumb {
-                    background: $colorMain;
+                    background: var(--color-primary);
                     border-radius: 7px;
                     border: 0.5px solid rgba(153, 153, 153, 0.25);
                     // box-shadow: 0 0 10px 2px #20476e;
@@ -93,7 +93,7 @@
                 @include setFlex(flex-end, center, 15px);
 
                 .Btn {
-                    background: $colorMain;
+                    background: var(--color-primary);
                     padding: 20px;
                     color: #FCFCFC;
                 }

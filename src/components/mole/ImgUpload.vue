@@ -22,6 +22,9 @@
         'deleteImg': [ i?: number ];
     }>();
 
+    type tComponentStatus = 'empty' | 'preview' | 'uploading' | 'uploaded';
+
+    const componentStatus : Ref<tComponentStatus> = ref('empty'); // 目前狀態
     const iImageUploaderList = ref<iImageUploader[]>([]); // 圖片上傳器陣列(上傳的圖片資料都塞這) newImgs
     const uploadArea = ref<HTMLElement>(); // 上傳區域
 
@@ -149,6 +152,14 @@
         return imgList;
     });
 
+    watch(imageList, (newVal) => {
+        if (newVal.length > 0) {
+            componentStatus.value = 'preview';
+        } else {
+            componentStatus.value = 'empty';
+        }
+    });
+
     const imageListVisible = ref(false); // 圖片資料列表是否顯示
     const triggerImageListVisible = (e: Event) => {
         e.stopPropagation();
@@ -170,8 +181,13 @@
             } as AxiosRequestHeaders;
 
             imageListVisible.value = true;
+            componentStatus.value = 'uploading';
+
+
             // 添加一個上傳用陣列 才不會舊圖也執行Promise.all 會回傳undefined
             const uploadList = imageList.value.filter(item => item.status === 'new');
+
+
             return Promise.all(
                 uploadList.map(async (imageUploader: iImageUploader) => { // 一次傳
                     if (imageUploader.status === 'old') {
@@ -230,7 +246,7 @@
                 // proxy.$notify('success', '結果！', '圖片上傳成功！').then(() => {
                 //     isUploading.value = false;
                 // });
-
+                componentStatus.value = 'uploaded';
                 // [-]新圖資料刪除
                 iImageUploaderList.value = [];
 
@@ -271,7 +287,7 @@
         e.preventDefault();
 
         iImageUploaderList.value = []; // 新圖資料刪除
-        document.querySelector('.fileInput')?.setAttribute('value', ''); // 清除file input的值
+        document.querySelector('.file-input')?.setAttribute('value', ''); // 清除file input的值
         imageListVisible.value = false; // 關閉圖片列表
 
         // emit('deleteImg'); // 舊圖資料刪除(emit)
@@ -307,11 +323,11 @@
 
     // [M] current progressBox
     const markProgressBox = (i: number) => {
-        const el = document.querySelector(`.progressBlock > .progressBox:nth-child(${i + 1})`) as HTMLElement;
+        const el = document.querySelector(`.progress-block > .progress-box:nth-child(${i + 1})`) as HTMLElement;
 
         if(!el.classList.contains('current')){
             // 清空current
-            document.querySelectorAll('.progressBox.current').forEach((item) => {
+            document.querySelectorAll('.progress-box.current').forEach((item) => {
                 item.classList.remove('current');
             });
 
@@ -330,7 +346,7 @@
         // 如果拖曳進來的東西是圖片
         if (e.dataTransfer?.files[0].type.match(/image.*/)) {
             // 把圖片file 塞進下層 file input
-            const fileInput = eTarget.querySelector('.fileInput') as HTMLInputElement;
+            const fileInput = eTarget.querySelector('.file-input') as HTMLInputElement;
             fileInput.files = e.dataTransfer.files;
 
             // 預覽圖片
@@ -359,24 +375,50 @@
 </script>
 
 <template>
-    <div class="imgUploadBlock">
-        <label class="imgUploadBox" :class="{view: imageList.length > 0}" ref="uploadArea">
-            <div v-if="imageList.length > 0"
-                ref="previewBlock"
-                class="previewBlock" :class="{hidden: sAddition}"
-            >
-                <ElImg v-for="(item, i) in imageList" :key="'previewImg_' + i"
-                    :id="'previewImg_'+i"
-                    :src="item.preview"
-                    class="img"
-                    :origin="item.status == 'old'? 'token' : 'public'"
+    <div class="img-upload-preview-block" :class="componentStatus">
+        <div class="target-block">
+            <!-- <div class="BtnBox">
+                <ElBtn class="subs" @click="clear">清除圖片</ElBtn>
+            </div> -->
 
-                    :ref="el => imageDomList.push(el)"
-                />
-            </div>
+            <!-- <div class="trigger-image-list" @click="triggerImageListVisible">
+                <ElSvgIcon name="arrow_drop_up"></ElSvgIcon>
+            </div> -->
+        </div>
 
-            <section v-else class="featuresBlock" :class="{hidden: sAddition}">
-                <ul class="featureBox">
+        <div v-if="imageList.length > 0" class="preview-block">
+            <TransitionGroup name="fadeY">
+                <a v-for="(item, i) in imageList" :key="'progress_' + i"
+                    class="preview-box" :class="[ item.progress.status, {current: i == 0} ]"
+                    @click="(e: Event) => {scrollTo('previewImg_' + i, i, e)}"
+                >
+                    <!-- <ElSvgIcon :name="(item.status == 'old')? 'description' : 'upload_file'"></ElSvgIcon> -->
+
+                    <ElImg :key="'previewImg_' + i"
+                        :id="'previewImg_'+i"
+                        :src="item.preview"
+                        :origin="item.status == 'old'? 'token' : 'public'"
+
+                        :ref="el => imageDomList.push(el)"
+                    />
+
+                    <div class="progress-box">
+                        <h6 class="fileName ellipsis" :title="item.fileName">File: {{ item.fileName }}</h6>
+                        <p v-if="item.status == 'new'" class="size"> {{file.formatSize(item.progress.loaded, 0) }}  /  {{ file.formatSize(item.progress.total, 0) }} </p>
+                        <p v-else class="size"> {{ file.formatSize(item.progress.total, 0) }} </p>
+                        <span v-if="item.status == 'new'" class="percent">{{ item.progress.progress }}%</span>
+                        <span v-else class="percent">Database</span>
+                        <!-- <ElSvgIcon v-if="item.status == 'new'" class="upload" name="comment-check"></ElSvgIcon> -->
+                        <ElSvgIcon name="delete_forever" class="delete" title="刪除圖片" @click="(e)=>{ deleteImage(item.status, item.index, e)}"></ElSvgIcon>
+                        <ElProgress :class="{disabled: item.status === 'old' }" :percent="item.progress.progress" el-width="100%"></ElProgress>
+                    </div>
+                </a>
+            </TransitionGroup>
+        </div>
+
+        <label class="img-upload-box" :class="{view: imageList.length > 0}" ref="uploadArea">
+            <section v-if="imageList.length == 0" class="features-block" :class="{hidden: sAddition}">
+                <ul class="feature-box">
                     <li class="feature">
                         <ElSvgIcon name="cloud_upload"></ElSvgIcon>
                         <span class="text">Upload</span>
@@ -391,78 +433,189 @@
                     </li>
                 </ul>
 
-                <h4 v-if="!sAddition" class="title">Drop Or Click Image Uploader.</h4>
-                <p v-if="!sAddition" class="description">Either <strong class="stress">Drop</strong> or <strong class="stress">Click</strong> this area to upload an image.</p>
+                <p v-if="!sAddition" class="description">Either <strong class="emphasis">Drop</strong> or <strong class="emphasis">Click</strong> this area to upload an image.</p>
             </section>
 
-            <input type="file" class="fileInput"
+            <input type="file" class="file-input"
                 accept="image/*" :multiple="props.isMultiple"
                 @change="previewImage(($event.target as HTMLInputElement).files)"
             />
-
-            <div class="progressBlock" :class="{open: imageListVisible}" >
-                <TransitionGroup name="fadeY">
-                    <a v-for="(item, i) in imageList" :key="'progress_' + i"
-                        class="progressBox" :class="[ item.progress.status, {current: i == 0} ]"
-                        @click="(e: Event) => {scrollTo('previewImg_' + i, i, e)}"
-                    >
-                        <ElSvgIcon :name="(item.status == 'old')? 'description' : 'upload_file'"></ElSvgIcon>
-                        <div class="dataBox">
-                            <h6 class="fileName ellipsis" :title="item.fileName">File: {{ item.fileName }}</h6>
-                            <p v-if="item.status == 'new'" class="size"> {{file.formatSize(item.progress.loaded) }}  /  {{ file.formatSize(item.progress.total) }} </p>
-                            <p v-else class="size"> {{ file.formatSize(item.progress.total) }} </p>
-                            <span v-if="item.status == 'new'" class="percent">{{ item.progress.progress }}%</span>
-                            <span v-else class="percent">Database</span>
-                            <!-- <ElSvgIcon v-if="item.status == 'new'" class="upload" name="comment-check"></ElSvgIcon> -->
-                            <ElSvgIcon name="delete_forever" class="delete" title="刪除圖片" @click="(e)=>{ deleteImage(item.status, item.index, e)}"></ElSvgIcon>
-                            <ElProgress :class="{disabled: item.status === 'old' }" :percent="item.progress.progress" el-width="100%"></ElProgress>
-                        </div>
-                    </a>
-                </TransitionGroup>
-
-                <div class="BtnBox">
-                    <ElBtn class="subs" @click="clear">清除圖片</ElBtn>
-                </div>
-
-                <div class="triggerImageList" @click="triggerImageListVisible">
-                    <ElSvgIcon name="photo_library"></ElSvgIcon>
-                </div>
-            </div>
         </label>
     </div>
 </template>
 
 <style lang="scss">
-    .imgUploadBlock {
+    .img-upload-preview-block {
         position: relative;
-        @include setSize(100%, 100%);
+        @include setSize(100%, 300px);
+        max-width: 450px;
+        border: 2px dashed var(--color-text-light);
+        border-radius: 5px;
 
-        .imgUploadBox {
+        // [-] 檔案列表
+        .preview-block {
+            @include setFlex(flex-start, stretch, 10px);
+
+            backdrop-filter: blur(5px);
+            @include setSize(100%, 0);
+            padding: 5px;
+            border-radius: 5px 0 5px 5px;
+
+            z-index: 1;
+            transition: .23s $cubic-FiSo;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+
+            .preview-box {
+                scroll-snap-align: start;
+                flex-shrink: 0;
+                @include setFlex(flex-start, stretch, 5px, column);
+                background: var(--color-view-block);
+                @include setSize(100%, 100%);
+                padding: 10px;
+                border: 1px solid rgba(0, 0, 0, 0.12);
+                border-radius: 5px;
+                box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12);
+                overflow: hidden;
+                transition: .23s $cubic-FiSo;
+
+                .el-img {
+                    flex: 1 0 auto;
+                    // display: block; // 這個很重要 不然是inline 會有lineHeight 等高也會出現卷軸
+                    @include setFlex();
+                    background: var(--color-text-light);
+                    width: 100%;
+                    padding: 8px;
+                    border-radius: 5px;
+                    img {
+                        object-fit: contain;
+                        object-position: 50% 50%;
+                    }
+                }
+
+                .progress-box {
+                    display: grid;
+                    grid-template-areas: "name  icon"
+                                        "size  percent"
+                                        "progress  progress";
+                    grid-template-columns: 1fr  45px;
+                    align-items: flex-end;
+                    width: 100%;
+                    padding: 5px 3px;
+
+                    .fileName {
+                        grid-area: name;
+                        align-self: start;
+                        color: #666;
+                        font-size: 1rem;
+                        line-height: 1.5rem;
+                    }
+                    .size {
+                        grid-area: size;
+                        margin: 0;
+                        color: var(--color-text);
+                        font-size: .875rem;
+                    }
+                    .percent {
+                        grid-area: percent;
+                        justify-self: end;
+                        color: var(--color-text);
+                        font-size: .875rem;
+                    }
+                    .icon {
+                        grid-area: icon;
+                        justify-self: end;
+                        @include setSize(30px, 30px);
+                        padding: 2px;
+                        cursor: pointer;
+                        transform: translate3d(3px, -3px, 0);
+                        &.upload {
+                            transform: scale3d(0, 0, 1);
+                        }
+                        &.delete {
+                            fill: var(--color-error);
+                        }
+                    }
+                    .el-progress {
+                        grid-area: progress;
+                        align-self: center;
+                    }
+                }
+
+                &.half {
+                    border-color: rgba(239, 210, 24, 0.6);
+                    .icon { fill: rgba(239, 210, 24, 0.6); }
+                    .data-box {
+                        .percent { color: rgba(239, 210, 24, 0.6); }
+                    }
+                }
+                &.success {
+                    border-color: rgba(18, 183, 92, 0.6);
+                    .icon { fill: rgba(18, 183, 92, 0.6); }
+                    .data-box {
+                        .percent { color: rgba(18, 183, 92, 0.85); }
+                        .icon.upload { transform: scale3d(1, 1, 1); }
+                    }
+                }
+                &.current {
+                    border-color: var(--color-primary);
+                    cursor: default;
+                    // &:hover {
+                    //     box-shadow: 0 0 5px 1px rgba($color: var(--color-primary), $alpha: 1);
+                    // }
+                }
+                &:hover {
+                    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.25);
+                }
+            }
+
+            .BtnBox {
+                flex: 1;
+                @include setFlex(flex-end, flex-end, 10px);
+                overflow: hidden;
+            }
+
+
+            /* 卷軸設定 */
+            &::-webkit-scrollbar {
+                background: var(--color-text-light);
+                @include setSize(8px, 8px);
+                border-radius: 4px;
+                cursor: pointer;
+                transition: .2s $cubic-FiSo;
+                &:hover {
+                    background: var(--color-primary-dark);
+                }
+            }
+            &::-webkit-scrollbar-thumb {
+                background: var(--color-primary);
+                border-radius: 4px;
+
+            }
+        }
+
+        .img-upload-box {
             @include setFlex();
-            background: #e9e9e9;
+            background: var(--color-border-box);
             @include setSize(100%, 100%);
-
-            border: 5px dashed $colorFont;
-            border-radius: 15px;
-            // box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.25),
-            //             0 0 3px 1px rgba(0, 0, 0, 0.25) inset;
 
             cursor: pointer;
             transition: 0.15s $cubic-FiSo;
             overflow: hidden;
 
-            .fileInput {
+            .file-input {
                 @include setSize(100%, 100%);
                 cursor: pointer;
                 z-index: -1;
                 opacity: 0;
             }
-            .featuresBlock {
+            .features-block {
                 @include setFlex(center, center, 10px, column);
                 position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%) scale3d(1, 1, 1);
+                top: 0;
+                left: 0;
+                @include setSize(100%, 100%);
+                padding: 1.25rem;
 
                 color: #333;
                 letter-spacing: 1px;
@@ -472,76 +625,42 @@
                 overflow: hidden;
                 transition: .15s $cubic-FiSo;
             }
-            .previewBlock {
-                position: absolute;
-                inset: 5px;
-                border-radius: 10px;
-                overflow-y: auto;
-                scroll-snap-type: y mandatory;
-                // 卷軸體
-                &::-webkit-scrollbar {
-                    background: $colorFont;
-                    width: 10px;
-                    border-radius: 5px;
-                }
-                // 卷軸底
-                &::-webkit-scrollbar-thumb {
-                    background: $colorMain;
-                    border-radius: 5px;
-                    border: 0.5px solid rgba(153, 153, 153, 0.25);
-                    // box-shadow: 0 0 10px 2px #20476e;
-                }
-            }
 
-            &.drop-enter .featuresBlock {
+            &.drop-enter .features-block {
                 transform: translate(-50%, -50%) scale3d(0, 0, 0);
             }
             &.drop-enter,
             &:hover {
-                border-color: $colorMain;
-                .featuresBlock { color: $colorMain; }
-                .featureBox .feature {
-                    .icon { fill: $colorMain; }
-                    .text { color: $colorMain;}
+                border-color: var(--color-primary-light);
+                .features-block { color: var(--color-primary-light); }
+                .feature-box .feature {
+                    .icon { fill: var(--color-primary-light); }
+                    .text { color: var(--color-primary-light);}
                 }
             }
             &.view {
-                border: 3px solid $colorMain;
-                border-radius: 15px;
+                border: 3px solid var(--color-primary);
+                border-radius: 8px;
             }
         }
 
-        .previewBlock {
-            .img {
-                scroll-snap-align: start;
-                flex-shrink: 0;
-                display: block; // 這個很重要 不然是inline 會有lineHeight 等高也會出現卷軸
-                @include setSize(100%, 100%);
-                // max-width: 100%;
-                object-fit: contain;
-                object-position: left top;
-                + .img { margin: 20px 0 0; }
-            }
-        }
 
-        .featuresBlock {
-            .featureBox {
+
+        .features-block {
+            .feature-box {
                 @include setFlex();
-                gap: 40px;
+                gap: 25px;
                 .feature {
                     @include setFlex(center, center, 10px, column);
                     .icon {
-                        @include setSize(80px, 80px);
-                        fill: $colorFont;
+                        @include setSize(65px, 65px);
+                        fill: var(--color-text);
                     }
                     .text {
-                        color: $colorFont;
-                        font-size: 22px;
-                        font-weight: bold;
+                        color: var(--color-text);
+                        font-size: 1.125rem;
+                        font-weight: 500;
                     }
-                }
-                .stress {
-                    color: $colorSubs;
                 }
             }
             .title {
@@ -553,150 +672,17 @@
             }
         }
 
-        // [-] 檔案列表
-        .progressBlock {
-            @include setFlex(flex-start, stretch, 10px, column);
-            position: absolute;
-            // inset: 12px 12px 12px calc(100% - 10px);
-            top: 12px;
-            bottom: 12px;
-            right: 2px;
-            // left: 100%;
-            width: 0;
-            min-width: 0;
-            max-width: 435px;
 
-            background: rgba(225, 225, 225, 0.75);
-            padding: 0;
+
+        .trigger-image-list {
+            position: absolute;
+            right: 0;
+            bottom: 100%;
+
+            background: rgba(230, 230, 230, 0.8);
             backdrop-filter: blur(5px);
-
-            border-radius: 25px;
-            z-index: 1;
-            transition: .23s $cubic-FiSo;
-            // overflow: hidden;
-
-            .progressBox {
-                @include setFlex(flex-start, stretch, 5px);
-
-                background: #f2f2f2ee;
-                padding: 0;
-                border-radius: 10px;
-                border: 0 solid rgba(0, 0, 0, 0.12);
-                box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.12);
-                overflow: hidden;
-                transition: .23s $cubic-FiSo;
-                &.half {
-                    border-color: rgba(239, 210, 24, 0.6);
-                    .icon { fill: rgba(239, 210, 24, 0.6); }
-                    .dataBox {
-                        .percent { color: rgba(239, 210, 24, 0.6); }
-                    }
-                }
-                &.success {
-                    border-color: rgba(18, 183, 92, 0.6);
-                    .icon { fill: rgba(18, 183, 92, 0.6); }
-                    .dataBox {
-                        .percent { color: rgba(18, 183, 92, 0.85); }
-                        .icon.upload { transform: scale3d(1, 1, 1); }
-                    }
-                }
-                &.current {
-                    border-color: $colorMain;
-                    cursor: default;
-                    &:hover {
-                        transform: translate3d(0, 0, 0);
-                        box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.25);
-                    }
-                }
-                &:hover {
-                    transform: translate3d(0, 0, 0) scale3d(1.01, 1.01, 1);
-                    box-shadow: 0 0 10px 1px rgba(49, 114, 110, 0.6);
-                }
-
-                .icon { @include setSize(75px, 75px); }
-                .dataBox {
-                    display: grid;
-                    grid-template-areas: "name  icon"
-                                        "size  percent"
-                                        "progress  progress";
-                    grid-template-columns: 1fr  60px;
-                    align-items: flex-end;
-                    width: calc(100% - 85px);
-                    // @include setFlex(flex-end, stretch, 5px, column);
-
-                    .fileName {
-                        grid-area: name;
-                        color: #666;
-                        font-size: 16px;
-                    }
-                    .size {
-                        grid-area: size;
-                        color: $colorFont;
-                        font-size: 14px;
-                    }
-                    .percent {
-                        grid-area: percent;
-                        justify-self: end;
-                        color: $colorFont;
-                        font-size: 14px;
-                    }
-                    .icon {
-                        grid-area: icon;
-                        justify-self: end;
-                        @include setSize(30px, 30px);
-                        padding: 2px;
-                        cursor: pointer;
-                        &.upload {
-                            transform: scale3d(0, 0, 1);
-                        }
-                        &.delete {
-                            fill: $colorError;
-                        }
-                    }
-                    .el-progress {
-                        grid-area: progress;
-                        align-self: center;
-                    }
-                }
-
-            }
-
-            .BtnBox {
-                flex: 1;
-                @include setFlex(flex-end, flex-end, 10px);
-                overflow: hidden;
-            }
-
-            &.open {
-                right: 12px;
-                width: 55%;
-                // left: 45%;
-                min-width: 400px;
-
-                padding: 20px;
-                box-shadow: 0 0 5px 1px rgba(0,0,0,0.25);
-                .progressBox {
-                    padding: 15px 20px 15px 10px;
-                    border-width: 1px;
-                    &.current { border-width: 3px; }
-                }
-
-                .triggerImageList{
-                    top: 40px;
-                    width: 50px;
-                }
-            }
-        }
-
-        .triggerImageList {
-            position: absolute;
-            top: 20px;
-            right: 100%;
-
-            background: rgba(225, 225, 225, 0.75);
-            @include setSize(35px, 50px);
-            padding: 10px;
-            border-radius: 15px 0 0 15px;
+            @include setSize(40px, 20px);
+            border-radius: 5px 5px 0 0;
             overflow: hidden;
 
             z-index: 1;
@@ -704,14 +690,59 @@
             transition: .2s $cubic-FiSo;
 
             .icon {
-                fill: $colorMain;
-                @include setSize(30px, 30px);
+                top: 50%;
+                fill: var(--color-primary);
+                @include setSize(40px, 40px);
+                transform: translateY(calc(-50% + 2px));
             }
 
             &:hover {
-                width: 50px;
-                .icon { fill: $colorSubs; }
+                // width: 50px;
+                .icon { fill: var(--color-primary-light); }
+            }
+        }
+
+
+        &.preview {
+            padding: 5px;
+            .preview-block {
+                height: 100%;
+            }
+
+            .img-upload-box {
+                @include setSize();
+                border: 0;
+                border-radius: 0;
+            }
+        }
+        &.uploading {
+            .preview-block {
+                height: 100%;
+                flex-direction: column;
+                .preview-box {
+                    flex-direction: row;
+                    height: auto;
+                    padding: 5px;
+                    .el-img {
+                        padding: 3px;
+                        width: 70px;
+                        height: 70px;
+                        img {
+                            height: 100%;
+                            object-fit: cover;
+                        }
+                    }
+                    .progress-box {
+                        padding: 0;
+                    }
+                }
+            }
+            .img-upload-box {
+                @include setSize();
+                border: 0;
+                border-radius: 0;
             }
         }
     }
 </style>
+

@@ -102,16 +102,16 @@ export const file = {
     },
 
     // 格式化文件大小顯示文字
-    formatSize: (size: number) => {
+    formatSize: (size: number, toFix: number = 2) => {
         return size > 1024
             ? size / 1024 > 1024
                 ? size / (1024 * 1024) > 1024
                     ? (size / (1024 * 1024 * 1024)  > 1024)
-                        ? (size / (1024 * 1024 * 1024 * 1024)).toFixed(2) + "TB"
-                        : (size / (1024 * 1024 * 1024)).toFixed(2) + "GB"
-                    : (size / (1024 * 1024)).toFixed(2) + "MB"
-                : (size / 1024).toFixed(2) + "KB"
-            : size.toFixed(2) + "B";
+                        ? (size / (1024 * 1024 * 1024 * 1024)).toFixed(toFix) + "TB"
+                        : (size / (1024 * 1024 * 1024)).toFixed(toFix) + "GB"
+                    : (size / (1024 * 1024)).toFixed(toFix) + "MB"
+                : (size / 1024).toFixed(toFix) + "KB"
+            : size.toFixed(toFix) + "B";
     },
 };
 

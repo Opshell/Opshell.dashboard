@@ -12,7 +12,9 @@
 <template>
     <label class="input-box" :class="{ row: type === 'row' }">
         <span class="text">{{ fieldName }}</span>
-        <slot></slot>
+        <div class="slot-box">
+            <slot></slot>
+        </div>
         <span v-if="remark != ''" class="remark">{{ remark }}</span>
     </label>
 </template>
@@ -27,6 +29,11 @@
             font-weight: 300;
             font-size: .875rem;
             line-height: 1.188rem;
+        }
+
+        .slot-box {
+            @include setFlex(flex-start, center, 5px);
+            width: 100%;
         }
 
         &.row {

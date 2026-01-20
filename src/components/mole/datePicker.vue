@@ -74,7 +74,7 @@
             // max-width: 210px;
             // min-width: 140px;
             padding: 8px 60px 8px 15px;
-            border: 1px solid $colorFont;
+            border: 1px solid var(--color-text);
             border-radius: 20px;
             font-size: 18px;
             backdrop-filter: blur(5px);
@@ -92,7 +92,7 @@
             &:focus,
             &.dp__input_focus {
                 outline: 0;
-                border-color: $colorMain;
+                border-color: var(--color-primary);
                 border-width: 2px;
             }
             ~ div {
@@ -112,17 +112,17 @@
         }
 
         .calendarIcon {
-            fill: $colorMain;
+            fill: var(--color-primary);
             transform: translateX(5px);
         }
         .clearIcon {
-            fill: $colorError;
+            fill: var(--color-error);
             transform: translateY(0.5px);
         }
     }
 
     .pickerBlock {
-        border: 1px solid $colorMain;
+        border: 1px solid var(--color-primary);
         border-radius: 20px;
         box-sizing: border-box;
         overflow: hidden;
@@ -134,14 +134,14 @@
         .day {
             &:hover {
                 background: #fff;
-                border: 1px solid $colorMain;
+                border: 1px solid var(--color-primary);
             }
 
             &.dp__today { // 今天
-                border-color: $colorMain;
+                border-color: var(--color-primary);
             }
             &.dp__active_date { // 選擇的日期
-                background: $colorMain;
+                background: var(--color-primary);
                 border-radius: 50%;
             }
         }

@@ -1,25 +1,3 @@
-$colorBack: #f2f2f2; // 最底底色(body)
-$colorViewBack: #fff; // 可視區主要背景色
-
-// $colorMain: #12A6B7; // 主色
-$colorMain: #e6b42c; // 主色
-$colorSubs: #3e74b3; // 輔色
-
-$colorInputBack: #F4F4F3; // 元件底色
-$colorFont: #A7A7A7; // 基礎文字顏色
-$colorUnFont: #FCFCFC; // 反轉文字顏色
-
-// 狀態色
-$colorError: #CB1E1E;
-$colorSuccess: #16a850;
-$colorWarning: #EFD218;
-$colorInfo: #12a6b7;
-
-// 社群色
-$colorFB  : #3b5998;
-$colorLINE: #00BA01;
-$colorTWIT: #1DA1F2;
-
 // 預設文字樣式
 %baseFont {
     fill: var(--color-primary);

@@ -22,7 +22,7 @@
         color: #333;
         .icon {
             @include setSize(100px, 100px);
-            fill: $colorError;
+            fill: var(--color-error);
             filter: drop-shadow(1px 1px 3px rgba($color: #000, $alpha: .2));
             animation: horizontally-shake .35s $cubic-FiSo;
         }
@@ -36,13 +36,13 @@
             font-weight: bold;
             animation: horizontally-shake .5s $cubic-FiSo .1s;
 
-            .focus { color: $colorError; }
+            .focus { color: var(--color-error); }
         }
         .content {
             font-size: 1.5rem;
             animation: horizontally-shake .5s $cubic-FiSo .2s;
 
-            .tag { color: $colorError; }
+            .tag { color: var(--color-error); }
         }
     }
 </style>

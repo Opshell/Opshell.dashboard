@@ -189,7 +189,7 @@
                 }
             }
             &.current {
-                background: $colorMain;
+                background: var(--color-primary);
                 .el-btn {
                     background: var(--color-primary);
                     border-color: var(--color-primary);
@@ -242,7 +242,7 @@
                 @include setSize(50px, 32px);
                 min-width: unset;
                 padding: 2px 8px;
-                border: 1px solid $colorMain;
+                border: 1px solid var(--color-primary);
                 border-radius: 3px 0 0 3px;
                 outline: none;
                 transition: 0.2s $cubic-FiSo;
@@ -258,11 +258,11 @@
                 opacity: 0.85;
 
                 &.location {
-                    background: $colorMain;
+                    background: var(--color-primary);
                     margin: 0 1px 0 -1px;
                 }
                 &.close {
-                    background: $colorError;
+                    background: var(--color-error);
                     width: 0;
                     padding: 0;
                     opacity: 0.7;

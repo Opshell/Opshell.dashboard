@@ -90,7 +90,7 @@
             position: absolute;
             top: calc(100% + 15px);
             left: 50%;
-            background: $colorInputBack;
+            background: var(--color-extreme-reverse);
             @include setSize(auto, auto);
             padding: 10px 20px;
             border-radius: 20px;

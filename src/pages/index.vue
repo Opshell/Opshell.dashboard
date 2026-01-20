@@ -150,11 +150,11 @@
         @include setSize(100%, 100vh);
 
         &.isLogin {
-            .features-block {
+            > .features-block {
                 width: 25%;
                 max-width: 350px;
             }
-            .view-block {
+            > .view-block {
                 @include setSize(100%, 100%);
                 padding: 0;
             }

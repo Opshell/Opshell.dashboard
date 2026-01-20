@@ -1,13 +1,13 @@
 <script setup lang="ts">
-    type tStyleType = 'bar' | 'circle';
+    type tType = 'bar' | 'circle';
     const props = withDefaults(defineProps<{
         disabled?: boolean;
-        styleType?: tStyleType;
+        type?: tType;
         percent: number;
         elWidth?: string;
     }>(), {
         disabled: false,
-        styleType: 'bar',
+        type: 'bar',
         percent: 0,
         elWidth: '100px',
     });
@@ -22,8 +22,10 @@
     });
 
     // [-] bar
+    // [#] 之後改 scale
     const percentWidth = computed(() => {
-        return `calc(${props.percent}% - 4px)`;
+        // return `calc(${props.percent}% - 4px)`;
+        return `scale3d(${props.percent / 100}, 1, 1)`;
     });
 
     // [-] circle
@@ -34,11 +36,11 @@
 
 <template>
     <div class="el-progress" :class="{ disabled }">
-        <div v-if="styleType == 'bar'" class="bar" :style="{'--width': elWidth}">
-            <div class="percent" :class="[status]" :style="{width: percentWidth}" ></div>
+        <div v-if="type == 'bar'" class="bar" :style="{'--width': elWidth}">
+            <div class="percent" :class="[status]" :style="{transform: percentWidth}" ></div>
         </div>
 
-        <div v-else-if="styleType == 'circle'"
+        <div v-else-if="type == 'circle'"
             class="cycle" :class="[status]"
             :style="circleStyle"
         >{{ percent }}%</div>
@@ -67,20 +69,19 @@
 
             .percent {
                 position: absolute;
-                top: 50%;
+                top: 2px;
                 left: 2px;
-                background: $colorMain;
-                height: 7px;
+                background: var(--color-primary);
+                @include setSize(calc(100% - 4px), 6px);
 
                 border-radius: 3px;
-                transform: translateY(-50%);
+                transform-origin: 0;
                 transition: .2s linear;
-
                 &.success {
-                    background: $colorSuccess;
+                    background: var(--color-success);
                     transition: .1s $cubic-SiRo;
                 }
-                &.half { background: $colorWarning; }
+                &.half { background: var(--color-warning); }
             }
         }
 

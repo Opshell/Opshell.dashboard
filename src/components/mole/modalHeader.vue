@@ -33,7 +33,7 @@
             @include setSize(45px, 45px);
             padding: 9px;
             border-radius: 50%;
-            fill: $colorFont;
+            fill: var(--color-text);
             cursor: pointer;
             transform: translateY(-2px);
             &:hover { transform: translateY(-2px) scale3d(1.1, 1.1, 1); }
@@ -49,7 +49,7 @@
 
             font-size: 20px;
             font-weight: normal;
-            color: $colorMain;
+            color: var(--color-primary);
 
             &::before,
             &::after {
@@ -85,7 +85,7 @@
 
             .icon {
                 @include setSize(30px, 30px);
-                fill: $colorMain;
+                fill: var(--color-primary);
             }
         }
 

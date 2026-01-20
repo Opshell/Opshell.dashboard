@@ -19,6 +19,7 @@ declare module 'vue' {
     ElInputBox: typeof import('./../components/el/inputBox.vue')['default']
     ElInputBoxOpshell: typeof import('./../components/el/inputBox-opshell.vue')['default']
     ElJodit: typeof import('./../components/el/jodit.vue')['default']
+    ElLineProgress: typeof import('./../components/el/lineProgress.vue')['default']
     ElLoadingOverlay: typeof import('./../components/el/loadingOverlay.vue')['default']
     ElProgress: typeof import('./../components/el/progress.vue')['default']
     ElRadio: typeof import('./../components/el/radio.vue')['default']
